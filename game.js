@@ -56,9 +56,6 @@ function resizeCanvas() {
 
 /* Initialize game at first */
 function init() {
-  var dreamVelocity = Math.ceil(CANVAS_HEIGHT/80);
-  alert(dreamVelocity);
-
   $(document).keydown(keysDown).keyup(keysUp);
   canvas[0].addEventListener("mousemove", getMousePosition);
   canvas[0].addEventListener("touchmove", getTouchPosition);
