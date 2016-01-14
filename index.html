@@ -1,0 +1,32 @@
+<html lang="en">
+
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+	<title>Tennra</title>
+	<link rel="shortcut icon" href="favicon.png" />
+
+	<link href="style.css" rel="stylesheet" type='text/css'>
+</head>
+
+<body>
+	<div id="game-assets">
+		<img src="images/dreamcatcher.svg" alt="">
+		<img src="images/building.svg" alt="">
+		<img src="images/skyline.svg" alt="">
+	</div>
+
+	<div id="wrapper" class="canvas-container">
+		<div id="menu">
+				<h3 id="loading"> Loading ...</h3>
+			<a id="start-btn" href="javascript:void(0);">  Start Game </a>
+		</div>
+		<canvas id="game-canvas" width="100px" height="100px" tab-index="1"></canvas>
+		<div id="end-game">
+
+		</div>
+	</div>
+	<script type="text/javascript" src="jquery-1.11.3.min.js"></script>
+	<script type="text/javascript" src="main.js"></script>
+	<script type="text/javascript" src="game.js"></script>
+</body>

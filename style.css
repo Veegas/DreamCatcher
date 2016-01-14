@@ -1,0 +1,82 @@
+@font-face {
+	font-family: Hero;
+	src: url("font/Hero.otf") format("opentype");
+}
+
+@font-face {
+	font-family: Hero;
+	font-weight: 100;
+	src: url("font/Hero Light.otf") format("opentype");
+}
+
+
+
+#game-assets {
+	display: none;
+}
+#game-canvas {
+	display: none;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	overflow: hidden;
+	background-color: #9FC2FF;
+}
+#menu {
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #00ACEE;
+}
+#loading {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	text-align: center;
+	transform: translate(-50%, -50%);
+	font-size: 36pt;
+	font-family: Hero;
+	color: white;
+}
+
+#start-btn {
+	display: none;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	color: #FFF;
+	text-decoration: none;
+	text-align: center;
+	font-size: 36pt;
+	font-family: Hero;
+	transform: translate(-50%, -50%);
+	background-color: #D40054;
+	padding: 10px;
+	border-radius: 30px;
+}
+#wrapper {
+	position: absolute;
+	width: 60%;
+	height: 90%;
+	top: 5%;
+	left: 20%;
+}
+
+@media only screen and  (max-device-width: 1024px) {
+	#wrapper {
+		width: 80%;
+		left: 10%;
+	}
+}
+
+@media only screen and  (max-device-width: 768px) {
+	#wrapper {
+		width: 90%;
+		left: 5%;
+	}
+}
