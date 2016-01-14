@@ -3,8 +3,8 @@
 $(window).load(function () {
 
   // setTimeout(function () {
-  //   $("#loading").fadeOut();
-  //   $("#start-btn").fadeIn();
+    $("#loading").fadeOut();
+    $("#start-btn").fadeIn();
   //
   // }, 1000);
 
