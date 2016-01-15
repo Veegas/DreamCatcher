@@ -331,14 +331,25 @@ function sendDream() {
   if (dreamsOnScreen < dreamsAllowedOnScreen) {
     dreamsProduced++;
     var houseIndex = Math.floor(Math.random() * houses.length);
-    var dreamType = Math.floor(Math.random() * 2 + 1);
     var velocities = [dreamVelocity, dreamVelocity + 0.5];
     var veloctiyIndex = Math.floor(Math.random() * 2);
+    var dreamType = chooseDreamType();
     var dreamWidth = 20;
     var dreamHeight = 20;
     var newDream = new Dream(houseIndex, dreamWidth, dreamHeight, dreamType, velocities[veloctiyIndex]);
     dreams.push(newDream);
 
+  }
+}
+
+// Function to randomly generate a dream type but constrained
+function chooseDreamType() {
+  var random = Math.random();
+  var goodDreamsPercentage = 0.7;
+  if (random < goodDreamsPercentage) {
+    return 1;
+  } else {
+    return 2;
   }
 }
 
@@ -402,8 +413,8 @@ function getMousePosition(event) {
     nx  -=  canvas.offset().left;
     ny  -=  canvas.offset().top;
 
-    dreamCatcher.x = nx;
-    dreamCatcher.y = ny;
+    dreamCatcher.x = nx - (dreamCatcher.width /2);
+    dreamCatcher.y = ny - (3 * dreamCatcher.height / 4);
 
 }
 
@@ -416,8 +427,8 @@ function getTouchPosition(event) {
   nx  -=  canvas.offset().left;
   ny  -=  canvas.offset().top;
 
-  dreamCatcher.x = nx;
-  dreamCatcher.y = ny;
+  dreamCatcher.x = nx - (dreamCatcher.width /2);
+  dreamCatcher.y = ny - (3 * dreamCatcher.height /4);
 }
 
 function endTouchListener(event) {
