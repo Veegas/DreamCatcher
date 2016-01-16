@@ -14,20 +14,22 @@ $(window).load(function () {
     _triggerGameEvent("gameStart");
     $("#menu").hide();
     $("#game-canvas").show();
-  })
+  });
 
   $("#restart-btn").on("click", function (event) {
     _triggerGameEvent("gameRestart");
     $("#end-game").hide();
-  })
+  });
 
-  $(document).on("gameEnd", function (event) {
+  document.addEventListener("gameEnd", function (event) {
     $("#end-game").fadeIn();
-  })
+    $("#score").html(event.detail.score);
+  });
 
 })
 
-function _triggerGameEvent(type) {
-  var ev = new Event(type, {"bubbles":true, "cancelable":false});
+function _triggerGameEvent(type, data) {
+  var detail = data || {};
+  var ev = new CustomEvent(type, {"detail": detail, "bubbles":true, "cancelable":false});
   document.dispatchEvent(ev);
 }

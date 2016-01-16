@@ -29,30 +29,29 @@ document.addEventListener("gamePause", gamePause);
 document.addEventListener("gameResume", gameResume);
 
 // Called when Game Starts
-function gameStart() {
+function gameStart(event) {
   resizeCanvas();
   init();
 }
 // Called when game ends
-function gameEnd() {
+function gameEnd(event) {
   _triggerGameEvent("gamePause");
-  $("#score").html(score);
 }
 
 // called when game restarts
-function gameRestart() {
+function gameRestart(event) {
   resetVariables();
   init();
 }
 
 // Called when game paused
-function gamePause() {
+function gamePause(event) {
   gameState = 2;
   ctx.save();
 }
 
 // Called when game Resumed
-function gameResume() {
+function gameResume(event) {
   gameState = 1;
   ctx.restore();
 }
@@ -467,7 +466,7 @@ function reachedSky(dream) {
   if (dream.type == 2) {
     livesLeft--;
     if (livesLeft == 0) {
-      _triggerGameEvent('gameEnd');
+      _triggerGameEvent('gameEnd', {"score": score});
     }
   }
 }
@@ -553,7 +552,8 @@ function draw() {
 
 }
 
-function _triggerGameEvent(type) {
-  var ev = new Event(type, {"bubbles":true, "cancelable":false});
+function _triggerGameEvent(type, data) {
+  var detail = data || {};
+  var ev = new CustomEvent(type, {"detail": detail, "bubbles":true, "cancelable":false});
   document.dispatchEvent(ev);
 }
