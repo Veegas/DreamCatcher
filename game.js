@@ -10,8 +10,53 @@ $(window).resize(function(event) {
   repositionHouses();
 });
 
-window.onBlur = pauseGame;
-window.onFocus = resumeGame;
+// This is to just list the available game events that occur
+var gameEvents = {
+  gameStart: "gameStart",
+  gameEnd: "gameEnd",
+  gameRestart: "gameRestart",
+  gamePause: "gamePause",
+  gameResume: "gameResume"
+}
+
+window.onBlur = gamePause;
+window.onFocus = gameResume;
+
+document.addEventListener("gameStart", gameStart);
+document.addEventListener("gameEnd", gameEnd);
+document.addEventListener("gameRestart", gameRestart);
+document.addEventListener("gamePause", gamePause);
+document.addEventListener("gameResume", gameResume);
+
+// Called when Game Starts
+function gameStart() {
+  resizeCanvas();
+  init();
+}
+// Called when game ends
+function gameEnd() {
+  _triggerGameEvent("gamePause");
+  $("#score").html(score);
+}
+
+// called when game restarts
+function gameRestart() {
+  resetVariables();
+  init();
+}
+
+// Called when game paused
+function gamePause() {
+  gameState = 2;
+  ctx.save();
+}
+
+// Called when game Resumed
+function gameResume() {
+  gameState = 1;
+  ctx.restore();
+}
+
 
 // Create the canvas
 var canvas = $("#game-canvas");
@@ -43,6 +88,32 @@ var sendDreamFlag = false;
 
 var gameState = 1;
 
+
+function resetVariables() {
+  houses = [];
+  dreams = [];
+  keysPressed = {
+    37: false,
+    38: false,
+    39: false,
+    40: false
+  };
+  startTime = Date.now();
+  currentTime;
+  sendDreamTimer = 1.5;
+  lastDreamTime = 0;
+  score = 0;
+  livesLeft = 3;
+  dreamVelocity = 1;
+  dreamsOnScreen = 0;
+  dreamsAllowedOnScreen = 5;
+  dreamsProduced = 0;
+  redDreamsCaught = 0;
+  dreamsCaughtFlag = true;
+  sendDreamFlag = false;
+
+  gameState = 1;
+}
 
 function resizeCanvas() {
   CANVAS_WIDTH = $(container).width();
@@ -196,9 +267,9 @@ function moveDreamCatcher(event) {
       // P key
     case 80:
       if (gameState == 1) {
-        pauseGame();
+        _triggerGameEvent("gamePause");
       } else {
-        resumeGame();
+        _triggerGameEvent("gameResume");
       }
       break;
     default:
@@ -252,9 +323,9 @@ function keysDown(event) {
     switch (event.which) {
       case 80:
         if (gameState == 1) {
-          pauseGame();
+          _triggerGameEvent("gamePause");
         } else {
-          resumeGame();
+          _triggerGameEvent("gameResume");
         }
         break;
       default:
@@ -345,7 +416,7 @@ function sendDream() {
 // Function to randomly generate a dream type but constrained
 function chooseDreamType() {
   var random = Math.random();
-  var goodDreamsPercentage = 0.7;
+  var goodDreamsPercentage = 0.65;
   if (random < goodDreamsPercentage) {
     return 1;
   } else {
@@ -395,6 +466,9 @@ function reachedSky(dream) {
   }
   if (dream.type == 2) {
     livesLeft--;
+    if (livesLeft == 0) {
+      _triggerGameEvent('gameEnd');
+    }
   }
 }
 
@@ -428,7 +502,7 @@ function getTouchPosition(event) {
   ny  -=  canvas.offset().top;
 
   dreamCatcher.x = nx - (dreamCatcher.width /2);
-  dreamCatcher.y = ny - (3 * dreamCatcher.height /4);
+  dreamCatcher.y = ny - dreamCatcher.height;
 }
 
 function endTouchListener(event) {
@@ -446,15 +520,7 @@ function drawText() {
   ctx.fillText(text, CANVAS_WIDTH - ctx.measureText(text).width - 15, 40);
 }
 
-function pauseGame() {
-  gameState = 2;
-  ctx.save();
-}
 
-function resumeGame() {
-  gameState = 1;
-  ctx.restore();
-}
 
 function update() {
 
@@ -487,7 +553,7 @@ function draw() {
 
 }
 
-function startGame() {
-  resizeCanvas();
-  init();
+function _triggerGameEvent(type) {
+  var ev = new Event(type, {"bubbles":true, "cancelable":false});
+  document.dispatchEvent(ev);
 }

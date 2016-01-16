@@ -14,6 +14,7 @@
 #game-assets {
 	display: none;
 }
+
 #game-canvas {
 	display: none;
 	position: absolute;
@@ -33,6 +34,16 @@
 	bottom: 0;
 	background-color: #00ACEE;
 }
+
+#end-game {
+	display: none;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: transparent;
+}
 #loading {
 	position: absolute;
 	top: 50%;
@@ -49,6 +60,35 @@
 	position: absolute;
 	left: 50%;
 	top: 50%;
+	color: #FFF;
+	text-decoration: none;
+	text-align: center;
+	font-size: 36pt;
+	font-family: Hero;
+	transform: translate(-50%, -50%);
+	background-color: #D40054;
+	padding: 10px;
+	border-radius: 30px;
+}
+
+.center-block {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.center-text {
+	position: relative;
+	left: 50%;
+	text-align: center;
+	transform: translate(-50%, -50%);
+	font-size: 36pt;
+	font-family: Hero;
+	color: white;
+}
+.btn {
+	position: relative;
 	color: #FFF;
 	text-decoration: none;
 	text-align: center;
