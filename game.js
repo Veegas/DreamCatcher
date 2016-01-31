@@ -105,7 +105,6 @@ function resetVariables() {
   lastDreamTime = 0;
   score = 0;
   livesLeft = 3;
-  dreamVelocity = 1;
   dreamsOnScreen = 0;
   dreamsAllowedOnScreen = 5;
   dreamsProduced = 0;
@@ -430,16 +429,23 @@ function updateClock() {
   currentTime = Date.now() - startTime;
   var currentTimeTengthSeconds = Math.floor(currentTime / 100);
   var sendDreamTimerTength = sendDreamTimer * 10;
+  var sendDreamTimerMilli = sendDreamTimer * 1000;
 
   var randomTolerance = Math.floor((Math.random() * sendDreamTimerTength) + 1);
 
-  if (currentTimeTengthSeconds % sendDreamTimerTength - randomTolerance == 0 && !sendDreamFlag) {
+  if (currentTime % sendDreamTimerMilli >= 0 && currentTime % sendDreamTimerMilli < 10) {
+    console.log("Current Time: ", currentTime, "sendDreamTimer", sendDreamTimerMilli, "currentTime % sendDreamTimerMilli", currentTime % sendDreamTimerMilli );
     sendDream();
     sendDreamFlag = true;
   }
-  if (currentTimeTengthSeconds % sendDreamTimerTength == sendDreamTimerTength - (sendDreamTimerTength - 1)) {
-    sendDreamFlag = false;
-  }
+
+  // if (currentTimeTengthSeconds % sendDreamTimerTength - randomTolerance == 0 && !sendDreamFlag) {
+  //   sendDream();
+  //   sendDreamFlag = true;
+  // }
+  // if (currentTimeTengthSeconds % sendDreamTimerTength == sendDreamTimerTength - (sendDreamTimerTength - 1)) {
+  //   sendDreamFlag = false;
+  // }
 
 
   if (dreamsProduced % 5 == 0 && !dreamsCaughtFlag) {
@@ -452,12 +458,12 @@ function updateClock() {
 }
 
 function nextLevel() {
-  if (dreamVelocity < 3) {
-    dreamVelocity += 0.3;
-    // dreamsAllowedOnScreen += 2;
+  if (dreamVelocity < 5) {
+    dreamVelocity += 0.7;
+    dreamsAllowedOnScreen += 1;
   }
-  if (sendDreamTimer > 0.5) {
-    sendDreamTimer -= 0.5;
+  if (sendDreamTimer > 0.4) {
+    sendDreamTimer -= 0.24;
   }
 }
 
@@ -519,6 +525,10 @@ function drawText() {
   ctx.fillText(text, CANVAS_WIDTH - ctx.measureText(text).width - 15, 15);
   text = "Lives: " + livesLeft;
   ctx.fillText(text, CANVAS_WIDTH - ctx.measureText(text).width - 15, 40);
+  text = "Between Dreams: " + sendDreamTimer;
+  ctx.fillText(text, CANVAS_WIDTH - ctx.measureText(text).width - 15, 70);
+  text = "Dream Velocity: " + dreamVelocity;
+  ctx.fillText(text, CANVAS_WIDTH - ctx.measureText(text).width - 15, 100);
 }
 
 
