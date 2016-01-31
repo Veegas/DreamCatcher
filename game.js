@@ -37,6 +37,7 @@ document.addEventListener("gameResume", gameResume);
 
 // Called when Game Starts
 function gameStart(event) {
+  resetVariables();
   resizeCanvas();
   init();
 }
@@ -73,60 +74,55 @@ var container = $(canvas).parent();
 var ctx = canvas[0].getContext("2d");
 
 // Game Variables
-var houses = [];
-var dreams = [];
-var keysPressed = {
-  37: false,
-  38: false,
-  39: false,
-  40: false
-};
-var startTime = Date.now();
+var houses;
+var dreams;
+var keysPressed;
+var startTime;
 var currentTime;
-var sendDreamTimer = 1;
-var lastDreamTime = 0;
-var score = 0;
-var livesLeft = 3;
-var dreamVelocity = 1;
-var dreamsOnScreen = 0;
-var dreamsAllowedOnScreen = 5;
-var dreamsProduced = 0;
-var lastDreamsProduced = 0;
-var redDreamsCaught = 0;
-var dreamsCaughtFlag = true;
-var sendDreamFlag = false;
-var gameState = 1;
-var dreamsProducedToNextLevel = 6;
+var sendDreamTimer;
+var lastDreamTime;
+var score;
+var livesLeft;
+var dreamVelocity;
+var dreamsOnScreen;
+var dreamsAllowedOnScreen;
+var dreamsProduced;
+var lastDreamsProduced;
+var redDreamsCaught;
+var dreamsCaughtFlag;
+var sendDreamFlag;
+var gameState;
+var dreamsProducedToNextLevel;
 
-//  Save Game Variables in object for easier resetting
-var initialGameVariables = {
-  houses : [],
-  dreams : [],
-  keysPressed : keysPressed,
-  startTime : startTime,
-  sendDreamTimer : sendDreamTimer,
-  lastDreamTime : lastDreamTime,
-  score : score,
-  livesLeft : livesLeft,
-  dreamVelocity: dreamVelocity,
-  dreamsOnScreen : dreamsOnScreen,
-  dreamsAllowedOnScreen : dreamsAllowedOnScreen,
-  dreamsProduced : dreamsProduced,
-  redDreamsCaught : redDreamsCaught,
-  dreamsCaughtFlag : dreamsCaughtFlag,
-  sendDreamFlag : sendDreamFlag,
-  dreamsProducedToNextLevel: dreamsProducedToNextLevel,
-  lastDreamsProduced: lastDreamsProduced,
-  gameState : 1,
-}
 
 
 
 
 function resetVariables() {
-  $.each(initialGameVariables, function(key, value) {
-    window[key] = value;
-  });
+  houses = [];
+  dreams = [];
+  keysPressed = {
+    37: false,
+    38: false,
+    39: false,
+    40: false
+  };
+  startTime = window.performance.now();
+  currentTime;
+  sendDreamTimer = 1;
+  lastDreamTime = 0;
+  score = 0;
+  livesLeft = 3;
+  dreamVelocity = 1;
+  dreamsOnScreen = 0;
+  dreamsProduced = 0;
+  dreamsAllowedOnScreen = 5;
+  lastDreamsProduced = 0;
+  redDreamsCaught = 0;
+  dreamsCaughtFlag = true;
+  sendDreamFlag = false;
+  gameState = 1;
+  dreamsProducedToNextLevel = 6;
 }
 
 function resizeCanvas() {
@@ -440,12 +436,14 @@ function chooseDreamType() {
 }
 
 function updateClock() {
-  currentTime = Date.now() - startTime;
+  currentTime = window.performance.now() - startTime;
   var currentTimeTengthSeconds = Math.floor(currentTime / 100);
   var sendDreamTimerTength = sendDreamTimer * 10;
   var sendDreamTimerMilli = sendDreamTimer * 1000;
 
-  var randomTolerance = Math.floor((Math.random() * sendDreamTimerTength) + 1);
+
+  console.log("currentTime: ", currentTime);
+
 
   if (currentTime % sendDreamTimerMilli >= 0 && currentTime % sendDreamTimerMilli < 10) {
     sendDream();
