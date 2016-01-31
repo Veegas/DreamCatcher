@@ -36,6 +36,8 @@ function gameStart(event) {
 // Called when game ends
 function gameEnd(event) {
   _triggerGameEvent("gamePause");
+  console.log(event);
+  $("#score").html(event.detail.score);
 }
 
 // called when game restarts
@@ -121,6 +123,7 @@ function resizeCanvas() {
     width: CANVAS_WIDTH,
     height: CANVAS_HEIGHT
   });
+  console.log(CANVAS_HEIGHT);
   draw();
 };
 
@@ -415,7 +418,7 @@ function sendDream() {
 // Function to randomly generate a dream type but constrained
 function chooseDreamType() {
   var random = Math.random();
-  var goodDreamsPercentage = 0.65;
+  var goodDreamsPercentage = 0.7;
   if (random < goodDreamsPercentage) {
     return 1;
   } else {
@@ -450,8 +453,8 @@ function updateClock() {
 
 function nextLevel() {
   if (dreamVelocity < 3) {
-    dreamVelocity += 1
-    dreamsAllowedOnScreen+=2;
+    dreamVelocity += 0.3;
+    // dreamsAllowedOnScreen += 2;
   }
   if (sendDreamTimer > 0.5) {
     sendDreamTimer -= 0.5;
@@ -506,7 +509,6 @@ function getTouchPosition(event) {
 
 function endTouchListener(event) {
   event.preventDefault();
-
 }
 
 function drawText() {
