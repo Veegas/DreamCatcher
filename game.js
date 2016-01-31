@@ -43,7 +43,8 @@ function gameEnd(event) {
 // called when game restarts
 function gameRestart(event) {
   resetVariables();
-  init();
+  initializeHouses();
+  draw();
 }
 
 // Called when game paused
@@ -83,36 +84,42 @@ var dreamVelocity = 1;
 var dreamsOnScreen = 0;
 var dreamsAllowedOnScreen = 5;
 var dreamsProduced = 0;
+var lastDreamsProduced = 0;
 var redDreamsCaught = 0;
 var dreamsCaughtFlag = true;
 var sendDreamFlag = false;
-
 var gameState = 1;
+var dreamsProducedToNextLevel = 6;
+
+//  Save Game Variables in object for easier resetting
+var initialGameVariables = {
+  houses : [],
+  dreams : [],
+  keysPressed : keysPressed,
+  startTime : startTime,
+  sendDreamTimer : sendDreamTimer,
+  lastDreamTime : lastDreamTime,
+  score : score,
+  livesLeft : livesLeft,
+  dreamVelocity: dreamVelocity,
+  dreamsOnScreen : dreamsOnScreen,
+  dreamsAllowedOnScreen : dreamsAllowedOnScreen,
+  dreamsProduced : dreamsProduced,
+  redDreamsCaught : redDreamsCaught,
+  dreamsCaughtFlag : dreamsCaughtFlag,
+  sendDreamFlag : sendDreamFlag,
+  dreamsProducedToNextLevel: dreamsProducedToNextLevel,
+  lastDreamsProduced: lastDreamsProduced,
+  gameState : 1,
+}
+
+
 
 
 function resetVariables() {
-  houses = [];
-  dreams = [];
-  keysPressed = {
-    37: false,
-    38: false,
-    39: false,
-    40: false
-  };
-  startTime = Date.now();
-  currentTime;
-  sendDreamTimer = 1.5;
-  lastDreamTime = 0;
-  score = 0;
-  livesLeft = 3;
-  dreamsOnScreen = 0;
-  dreamsAllowedOnScreen = 5;
-  dreamsProduced = 0;
-  redDreamsCaught = 0;
-  dreamsCaughtFlag = true;
-  sendDreamFlag = false;
-
-  gameState = 1;
+  $.each(initialGameVariables, function(key, value) {
+    window[key] = value;
+  });
 }
 
 function resizeCanvas() {
@@ -434,7 +441,6 @@ function updateClock() {
   var randomTolerance = Math.floor((Math.random() * sendDreamTimerTength) + 1);
 
   if (currentTime % sendDreamTimerMilli >= 0 && currentTime % sendDreamTimerMilli < 10) {
-    console.log("Current Time: ", currentTime, "sendDreamTimer", sendDreamTimerMilli, "currentTime % sendDreamTimerMilli", currentTime % sendDreamTimerMilli );
     sendDream();
     sendDreamFlag = true;
   }
@@ -447,23 +453,27 @@ function updateClock() {
   //   sendDreamFlag = false;
   // }
 
+  if (lastDreamsProduced != dreamsProduced) {
+    lastDreamsProduced = dreamsProduced;
+  }
 
-  if (dreamsProduced % 5 == 0 && !dreamsCaughtFlag) {
+  if (lastDreamsProduced % dreamsProducedToNextLevel == 0 && !dreamsCaughtFlag) {
     nextLevel();
     dreamsCaughtFlag = true;
   }
-  if (dreamsProduced % 5 == 4) {
+  if (lastDreamsProduced % dreamsProducedToNextLevel == dreamsProducedToNextLevel - 1) {
     dreamsCaughtFlag = false;
   }
 }
 
 function nextLevel() {
+
   if (dreamVelocity < 5) {
-    dreamVelocity += 0.7;
+    dreamVelocity += 0.58;
     dreamsAllowedOnScreen += 1;
   }
   if (sendDreamTimer > 0.4) {
-    sendDreamTimer -= 0.24;
+    sendDreamTimer -= 0.2;
   }
 }
 
