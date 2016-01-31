@@ -453,15 +453,12 @@ function updateClock() {
   //   sendDreamFlag = false;
   // }
 
-  if (lastDreamsProduced != dreamsProduced) {
-    lastDreamsProduced = dreamsProduced;
-  }
 
-  if (lastDreamsProduced % dreamsProducedToNextLevel == 0 && !dreamsCaughtFlag) {
+  if (dreamsProduced % 6 == 0 && !dreamsCaughtFlag) {
     nextLevel();
     dreamsCaughtFlag = true;
   }
-  if (lastDreamsProduced % dreamsProducedToNextLevel == dreamsProducedToNextLevel - 1) {
+  if (dreamsProduced % 6 == 5) {
     dreamsCaughtFlag = false;
   }
 }
