@@ -83,7 +83,7 @@ var keysPressed = {
 };
 var startTime = Date.now();
 var currentTime;
-var sendDreamTimer = 1.5;
+var sendDreamTimer = 1;
 var lastDreamTime = 0;
 var score = 0;
 var livesLeft = 3;
@@ -477,7 +477,7 @@ function nextLevel() {
     dreamsAllowedOnScreen += 1;
   }
   if (sendDreamTimer > 0.4) {
-    sendDreamTimer -= 0.2;
+    sendDreamTimer -= 0.1;
   }
 }
 
