@@ -1,5 +1,12 @@
 var CANVAS_WIDTH, CANVAS_HEIGHT;
-
+window.requestAnimFrame = (function(){
+  return  window.requestAnimationFrame       ||
+          window.webkitRequestAnimationFrame ||
+          window.mozRequestAnimationFrame    ||
+          function( callback ){
+            window.setTimeout(callback, 1000 / 60);
+          };
+})();
 
 var background = new Image();
 background.src = "images/skyline.svg";
