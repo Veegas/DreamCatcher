@@ -444,14 +444,15 @@ function updateClock() {
   var sendDreamTimerTength = sendDreamTimer * 10;
   var sendDreamTimerMilli = sendDreamTimer * 1000;
 
-  var timeBetweenFrames = Math.floor(currentTime - lastCurrentTime ) || 16;
+  var timeBetweenFrames = Math.ceil(currentTime - lastCurrentTime ) || 16;
 
 
   console.log("currentTime % sendDreamTimerMilli: ", currentTime % sendDreamTimerMilli, " timeBetweenFrames: ", timeBetweenFrames);
 
 
-
-  if (currentTime % sendDreamTimerMilli >= 0 && currentTime % sendDreamTimerMilli < timeBetweenFrames) {
+// Sending dreams using current time % dream interval == 0 doesn't work as currentTime doesn't increase every constant frame
+// Get the time difference between the last two frames and assume it's the same for this one to give you the tolerance
+  if (currentTime % sendDreamTimerMilli >= 0 && currentTime % sendDreamTimerMilli <= timeBetweenFrames) {
     sendDream();
     sendDreamFlag = true;
   }
