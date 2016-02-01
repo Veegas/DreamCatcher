@@ -1,12 +1,15 @@
 var CANVAS_WIDTH, CANVAS_HEIGHT;
 window.requestAnimFrame = (function(){
-  return  window.requestAnimationFrame       ||
+  return   window.requestAnimationFrame       ||
           window.webkitRequestAnimationFrame ||
           window.mozRequestAnimationFrame    ||
           function( callback ){
             window.setTimeout(callback, 1000 / 60);
           };
 })();
+// window.requestAnimationFrame       ||
+//         window.webkitRequestAnimationFrame ||
+//         window.mozRequestAnimationFrame    ||
 
 var background = new Image();
 background.src = "images/skyline.svg";
@@ -132,7 +135,6 @@ function resizeCanvas() {
     width: CANVAS_WIDTH,
     height: CANVAS_HEIGHT
   });
-  console.log(CANVAS_HEIGHT);
   draw();
 };
 
@@ -143,7 +145,7 @@ function init() {
   canvas[0].addEventListener("touchmove", getTouchPosition);
   canvas[0].addEventListener("touchend", endTouchListener);
   initializeHouses();
-  draw();
+  update();
 }
 
 // Drawing and animation in Canvas
@@ -436,16 +438,20 @@ function chooseDreamType() {
 }
 
 function updateClock() {
+  var lastCurrentTime = currentTime || 0;
   currentTime = window.performance.now() - startTime;
   var currentTimeTengthSeconds = Math.floor(currentTime / 100);
   var sendDreamTimerTength = sendDreamTimer * 10;
   var sendDreamTimerMilli = sendDreamTimer * 1000;
 
+  var timeBetweenFrames = Math.floor(currentTime - lastCurrentTime ) || 16;
 
-  console.log("currentTime: ", currentTime);
+
+  console.log("currentTime % sendDreamTimerMilli: ", currentTime % sendDreamTimerMilli, " timeBetweenFrames: ", timeBetweenFrames);
 
 
-  if (currentTime % sendDreamTimerMilli >= 0 && currentTime % sendDreamTimerMilli < 10) {
+
+  if (currentTime % sendDreamTimerMilli >= 0 && currentTime % sendDreamTimerMilli < timeBetweenFrames) {
     sendDream();
     sendDreamFlag = true;
   }
@@ -552,9 +558,8 @@ function update() {
     checkDreamsCollision();
     moveDreams();
     draw();
-  } else {
-    requestAnimationFrame(update);
   }
+    requestAnimFrame(update);
 }
 
 function draw() {
@@ -572,7 +577,7 @@ function draw() {
   drawHouses();
   drawDreams();
   drawText();
-  requestAnimationFrame(update);
+
 
 }
 
