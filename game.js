@@ -96,7 +96,8 @@ var dreamsCaughtFlag;
 var sendDreamFlag;
 var gameState;
 var dreamsProducedToNextLevel;
-
+var currentLevel;
+var maxLevels;
 
 
 
@@ -126,6 +127,8 @@ function resetVariables() {
   sendDreamFlag = false;
   gameState = 1;
   dreamsProducedToNextLevel = 6;
+  currentLevel = 1;
+  maxLevels = 7;
 }
 
 function resizeCanvas() {
@@ -477,13 +480,19 @@ function updateClock() {
 
 function nextLevel() {
 
-  if (dreamVelocity < 5) {
-    dreamVelocity += 0.58;
+  var velocityStep = calculateLevelStep(1,7,maxLevels);
+  var timerStep = calculateLevelStep(1,0.3,maxLevels);
+
+  if (currentLevel <= maxLevels) {
+    dreamVelocity += velocityStep;
+    sendDreamTimer += timerStep;
     dreamsAllowedOnScreen += 1;
+    currentLevel++;
   }
-  if (sendDreamTimer > 0.4) {
-    sendDreamTimer -= 0.1;
-  }
+}
+
+function calculateLevelStep(min, max, levels) {
+  return ((max - min)/levels);
 }
 
 function reachedSky(dream) {
