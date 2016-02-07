@@ -9,10 +9,10 @@ window.requestAnimFrame = (function() {
 })();
 
 var background = new Image();
-background.src = "images/skyline.png";
+background.src = "images/skyline.svg";
 
 var housesImage = new Image();
-housesImage.src = "images/houses.png";
+housesImage.src = "images/houses.svg";
 
 var goodDreamImage = new Image();
 var badDreamImage = new Image();
@@ -598,13 +598,12 @@ function getMousePosition(event) {
   ny -= canvas.offset().top;
 
   var newDreamCatcherX = nx - (dreamCatcher.width / 2);
-  console.log("dreamCatcher.x - nx: ", dreamCatcher.x - newDreamCatcherX);
 
   if (dreamCatcher.x - newDreamCatcherX > 1) {
     dreamCatcher.moveLeft();
   } else if (dreamCatcher.x - newDreamCatcherX < -1) {
-    dreamCatcher.moveRight();
   } else {
+    dreamCatcher.moveRight();
     dreamCatcher.rest();
   }
   dreamCatcher.x = newDreamCatcherX;
@@ -621,7 +620,17 @@ function getTouchPosition(event) {
   nx -= canvas.offset().left;
   ny -= canvas.offset().top;
 
-  dreamCatcher.x = nx - (dreamCatcher.width / 2);
+  var newDreamCatcherX = nx - (dreamCatcher.width / 2);
+
+  if (dreamCatcher.x - newDreamCatcherX > 1) {
+    dreamCatcher.moveLeft();
+  } else if (dreamCatcher.x - newDreamCatcherX < -1) {
+    dreamCatcher.moveRight();
+  } else {
+    dreamCatcher.rest();
+  }
+
+  dreamCatcher.x = newDreamCatcherX;
   dreamCatcher.y = ny - dreamCatcher.height;
 }
 
