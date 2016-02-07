@@ -9,10 +9,10 @@ window.requestAnimFrame = (function() {
 })();
 
 var background = new Image();
-background.src = "images/skyline.png";
+background.src = "images/skyline.svg";
 
 var housesImage = new Image();
-housesImage.src = "images/houses.png";
+housesImage.src = "images/houses.svg";
 
 var goodDreamImage = new Image();
 var badDreamImage = new Image();
