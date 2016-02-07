@@ -8,11 +8,17 @@ window.requestAnimFrame = (function() {
     };
 })();
 
-var background = new Image();
-background.src = "images/skyline.svg";
+// var background = new Image();
+// if (CANVAS_WIDTH > 750) {
+//   background.src = "images/skyline.png";
+// } else if (CANVAS_WIDTH > 350) {
+//   background.src = "images/skyline-m.png";
+// } else {
+//   background.src = "images/skyline-s.png";
+// }
 
-var housesImage = new Image();
-housesImage.src = "images/houses.svg";
+// var housesImage = new Image();
+// housesImage.src = "images/houses.png";
 
 var goodDreamImage = new Image();
 var badDreamImage = new Image();
@@ -217,7 +223,7 @@ function House(x, y) {
 
 function Dream(houseIndex, type, velocity) {
   var correspondingHouse = houses[houseIndex];
-  this.x = correspondingHouse.x + correspondingHouse.width / 2;
+  this.x = Math.floor(correspondingHouse.x + correspondingHouse.width / 2);
   this.y = correspondingHouse.y;
   // type 1 => Good Dream, type 2 => Bad Dream
   if (type == 1) {
@@ -255,7 +261,7 @@ function Dream(houseIndex, type, velocity) {
       reachedSky(this);
       this.resetDream();
     } else if (this.active) {
-      this.y -= this.velocity;
+      this.y = Math.floor(this.y - this.velocity);
     }
   };
 
@@ -297,6 +303,8 @@ function Dream(houseIndex, type, velocity) {
     /***************************************************/
 
     /*********** SIMPLE IMAGE DREAMS ******************/
+
+    console.log("DREAM X: ", this.x, " Dream Y: ", this.y);
   if (this.type == 2) {
     ctx.drawImage(badDreamImage, this.x, this.y, this.width, this.height);
   } else if (this.type == 1) {
@@ -529,6 +537,7 @@ function updateClock() {
   var timeBetweenFrames = Math.ceil(currentTime - lastCurrentTime) || 16;
 
 
+  console.log("TIME BETWEEN FRAMES: ", timeBetweenFrames);
 
 
   // Sending dreams using current time % dream interval == 0 doesn't work as currentTime doesn't increase every constant frame
@@ -686,11 +695,10 @@ function update() {
 function draw() {
   ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-  ctx.drawImage(background, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-  ctx.drawImage(housesImage, 0, CANVAS_HEIGHT - 100, CANVAS_WIDTH, 100);
+  // ctx.drawImage(background, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+  // ctx.drawImage(housesImage, 0, CANVAS_HEIGHT - 100, CANVAS_WIDTH, 100);
 
   drawDreamCatcher();
-  // drawHouses();
   drawDreams();
   drawHUD();
 
