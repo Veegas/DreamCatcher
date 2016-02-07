@@ -1,18 +1,37 @@
 var CANVAS_WIDTH, CANVAS_HEIGHT;
-window.requestAnimFrame = (function(){
-  return   window.requestAnimationFrame       ||
-          window.webkitRequestAnimationFrame ||
-          window.mozRequestAnimationFrame    ||
-          function( callback ){
-            window.setTimeout(callback, 1000 / 60);
-          };
+window.requestAnimFrame = (function() {
+  return window.requestAnimationFrame ||
+    window.webkitRequestAnimationFrame ||
+    window.mozRequestAnimationFrame ||
+    function(callback) {
+      window.setTimeout(callback, 1000 / 60);
+    };
 })();
-// window.requestAnimationFrame       ||
-//         window.webkitRequestAnimationFrame ||
-//         window.mozRequestAnimationFrame    ||
 
 var background = new Image();
-background.src = "images/skyline.svg";
+background.src = "images/skyline.png";
+
+var housesImage = new Image();
+housesImage.src = "images/houses.png";
+
+var goodDreamImage = new Image();
+var badDreamImage = new Image();
+goodDreamImage.src = "images/goodDream.svg";
+badDreamImage.src = "images/badDream.svg";
+
+var dreamCatcherCenterImage = new Image();
+var dreamCatcherLeftImage = new Image();
+var dreamCatcherRightImage = new Image();
+
+dreamCatcherLeftImage.src = "images/dreamCatcherLeft.svg";
+dreamCatcherRightImage.src = "images/dreamCatcherRight.svg";
+dreamCatcherCenterImage.src = "images/dreamCatcherCenter.svg";
+
+var lifeLeftImage = new Image();
+var lifeLostImage = new Image();
+
+lifeLostImage.src = "images/lifeLost.svg";
+lifeLeftImage.src = "images/lifeLeft.svg";
 
 // When window resizes change canvas size to match it's parent
 $(window).resize(function(event) {
@@ -20,7 +39,7 @@ $(window).resize(function(event) {
   repositionHouses();
 });
 
-// This is to just list the available game events that occur
+// list of available game events that occur
 var gameEvents = {
   gameStart: "gameStart",
   gameEnd: "gameEnd",
@@ -40,20 +59,20 @@ document.addEventListener("gameResume", gameResume);
 
 // Called when Game Starts
 function gameStart(event) {
-  resetVariables();
+  setVariables();
   resizeCanvas();
   init();
 }
 // Called when game ends
 function gameEnd(event) {
   _triggerGameEvent("gamePause");
-  console.log(event);
+  backgroundSound.pause();
   $("#score").html(event.detail.score);
 }
 
 // called when game restarts
 function gameRestart(event) {
-  resetVariables();
+  setVariables();
   initializeHouses();
   draw();
 }
@@ -75,6 +94,11 @@ function gameResume(event) {
 var canvas = $("#game-canvas");
 var container = $(canvas).parent();
 var ctx = canvas[0].getContext("2d");
+
+// Audio Variables
+
+var badDreamSound = new Audio('audio/sound2.wav');
+var goodDreamSound = new Audio('audio/sound1.wav');
 
 // Game Variables
 var houses;
@@ -98,11 +122,12 @@ var gameState;
 var dreamsProducedToNextLevel;
 var currentLevel;
 var maxLevels;
+var goodDreamsPercentage;
 
 
 
 
-function resetVariables() {
+function setVariables() {
   houses = [];
   dreams = [];
   keysPressed = {
@@ -129,6 +154,8 @@ function resetVariables() {
   dreamsProducedToNextLevel = 6;
   currentLevel = 1;
   maxLevels = 7;
+  goodDreamsPercentage = 0.7;
+
 }
 
 function resizeCanvas() {
@@ -154,32 +181,21 @@ function init() {
 // Drawing and animation in Canvas
 
 var dreamCatcher = {
-  x: 50,
   y: 30,
-  width: 50,
-  height: 100,
+  width: 100,
+  x: 50,
+  height: 130,
   velocity: 15,
-  image: "images/dreamcatcher.svg",
+  image: dreamCatcherCenterImage,
   moveLeft: function moveLeft() {
-    if (dreamCatcher.x > 0) {
-      dreamCatcher.x -= dreamCatcher.velocity;
-    }
+    dreamCatcher.image = dreamCatcherLeftImage;
   },
   moveRight: function moveRight() {
-    if (dreamCatcher.x < CANVAS_WIDTH - dreamCatcher.width) {
-      dreamCatcher.x += dreamCatcher.velocity;
-    }
+    dreamCatcher.image = dreamCatcherRightImage;
   },
-  moveUp: function moveUp() {
-    if (dreamCatcher.y > 0) {
-      dreamCatcher.y -= dreamCatcher.velocity;
-    }
+  rest: function rest() {
+    dreamCatcher.image = dreamCatcherCenterImage;
   },
-  moveDown: function moveDown() {
-    if (dreamCatcher.y + dreamCatcher.height < CANVAS_HEIGHT) {
-      dreamCatcher.y += dreamCatcher.velocity;
-    }
-  }
 }
 
 function House(x, y) {
@@ -187,7 +203,7 @@ function House(x, y) {
   this.height = 120;
   this.x = x;
   this.y = CANVAS_HEIGHT - this.height;
-  this.image = "images/building.svg";
+  this.image = "images/building.png";
 
 
   this.drawHouse = function() {
@@ -199,16 +215,39 @@ function House(x, y) {
 
 }
 
-function Dream(houseIndex, width, height, type, velocity) {
+function Dream(houseIndex, type, velocity) {
   var correspondingHouse = houses[houseIndex];
   this.x = correspondingHouse.x + correspondingHouse.width / 2;
   this.y = correspondingHouse.y;
-  this.width = width;
-  this.height = height;
+  // type 1 => Good Dream, type 2 => Bad Dream
+  if (type == 1) {
+    this.width = 75;
+    this.height = 75;
+  } else {
+    this.width = 75;
+    this.height = 45;
+  }
   this.velocity = velocity;
-  // type 1 => Green Dream, type 2 => Red Dream
-  this.type = type;
   this.active = true;
+  this.type = type;
+  this.ticksLived = 0;
+  this.ticksPerFrame = 15;
+  this.currentFrame = 0;
+  this.totalFrames = 4;
+  // Width & height of each frame inside sprite
+  this.sprite = {
+    frame: {
+      width: 849,
+      height: 611,
+    },
+    src: "images/blue_bird_sprite.png"
+  }
+
+  // match speed of frames of sprite to match the speed of flapping of wings
+  var distanceMoved = velocity * 60;
+  var numberOfFlaps = Math.floor(distanceMoved / 25);
+  this.ticksPerFrame = Math.floor(60 / numberOfFlaps);
+
   dreamsOnScreen++;
   this.moveDream = function() {
     this.initialPosition = correspondingHouse.y
@@ -226,19 +265,60 @@ function Dream(houseIndex, width, height, type, velocity) {
   }
 
   this.drawDream = function drawDream() {
-    var gradient = ctx.createRadialGradient(this.x, this.y, this.width / 10, this.x, this.y, this.width);
-    gradient.addColorStop(0, 'white');
 
-    if (this.type == 2) {
-      gradient.addColorStop(1, "#B50000");
-    } else if (this.type == 1) {
-      gradient.addColorStop(1, "#00B500");
+      /*********** SPRITE IMAGE DREAMS ******************/
+    // this.handleSpriteFrames();
+    // var dreamImage = new Image();
+    //
+    // if (this.type == 2) {
+    //   ctx.fillStyle = "#000"; // Set color to black
+    // } else if (this.type == 1) {
+    //   ctx.fillStyle = "#F00"; // Set color to black
+    // }
+    // dreamImage.src = this.sprite.src;
+    // ctx.drawImage(dreamImage, this.currentFrame * this.sprite.frame.width ,0, this.sprite.frame.width, this.sprite.frame.height, this.x, this.y, this.width, this.height);
+      /***************************************************/
+
+
+    /*********** Gradient DREAMS ******************/
+    // var gradient = ctx.createRadialGradient(this.x, this.y, this.width / 10, this.x, this.y, this.width);
+    // gradient.addColorStop(0, 'white');
+    //
+    // if (this.type == 2) {
+    //   gradient.addColorStop(1, "#B50000");
+    // } else if (this.type == 1) {
+    //   gradient.addColorStop(1, "#0000B5");
+    // }
+    // ctx.fillStyle = gradient;
+    // ctx.beginPath();
+    // ctx.arc(this.x, this.y, this.width, 0, 2 * Math.PI);
+    // ctx.fill();
+    // ctx.closePath();
+    /***************************************************/
+
+    /*********** SIMPLE IMAGE DREAMS ******************/
+  if (this.type == 2) {
+    ctx.drawImage(badDreamImage, this.x, this.y, this.width, this.height);
+  } else if (this.type == 1) {
+    ctx.drawImage(goodDreamImage, this.x, this.y, this.width, this.height);
+  }
+
+    /***************************************************/
+
+
+  }
+
+  this.handleSpriteFrames = function handleSpriteFrames() {
+    this.ticksLived++;
+
+
+    if (this.ticksLived % this.ticksPerFrame == 0) {
+      if (this.currentFrame < this.totalFrames - 1) {
+        this.currentFrame++;
+      } else {
+        this.currentFrame = 0;
+      }
     }
-    ctx.fillStyle = gradient;
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.width, 0, 2 * Math.PI);
-    ctx.fill();
-    ctx.closePath();
   }
 }
 
@@ -253,7 +333,7 @@ function initializeHouses() {
 
 function repositionHouses() {
   housesX = [CANVAS_WIDTH / 8, 3 * CANVAS_WIDTH / 8, 5 * CANVAS_WIDTH / 8, 7 * CANVAS_WIDTH / 8];
-  houses.map(function (house, index) {
+  houses.map(function(house, index) {
     house.x = housesX[index];
     house.y = CANVAS_HEIGHT - house.height;
     return house;
@@ -359,9 +439,7 @@ function keysUp(event) {
 function drawDreamCatcher() {
   ctx.fillStyle = "#000"; // Set color to black
   // Initializing Images
-  var dreamCatcherImage = new Image();
-  dreamCatcherImage.src = dreamCatcher.image;
-  ctx.drawImage(dreamCatcherImage, dreamCatcher.x, dreamCatcher.y, dreamCatcher.width, dreamCatcher.height)
+  ctx.drawImage(dreamCatcher.image, dreamCatcher.x, dreamCatcher.y, dreamCatcher.width, dreamCatcher.height)
 }
 
 function drawHouses() {
@@ -394,7 +472,7 @@ function checkDreamsCollision() {
 function checkCatcherCollision(dream) {
   var dreamCatcherBottom = dreamCatcher.y + dreamCatcher.height;
   var dreamCatcherTop = dreamCatcher.y;
-  var dreamCatcherCenter = dreamCatcher.y + (dreamCatcher.height / 4);
+  var dreamCatcherCenter = dreamCatcher.y - (dreamCatcher.height / 2);
   var dreamBottom = dream.y - dream.width;
   if (dream.x > dreamCatcher.x - 5 && dream.x < dreamCatcher.x + dreamCatcher.width + 5) {
     if (dreamCatcherCenter - dreamBottom < 20 && dreamCatcherCenter - dreamBottom >= -20) {
@@ -408,9 +486,13 @@ function catchDream(dream) {
   dreamsOnScreen--;
   if (dream.type == 1) {
     score -= 5;
+    goodDreamSound.currentTime = 0;
+    goodDreamSound.play();
   } else if (dream.type == 2) {
     score += 10;
     redDreamsCaught++;
+    badDreamSound.currentTime = 0;
+    badDreamSound.play();
   }
 }
 
@@ -421,9 +503,7 @@ function sendDream() {
     var velocities = [dreamVelocity, dreamVelocity + 0.5];
     var veloctiyIndex = Math.floor(Math.random() * 2);
     var dreamType = chooseDreamType();
-    var dreamWidth = 20;
-    var dreamHeight = 20;
-    var newDream = new Dream(houseIndex, dreamWidth, dreamHeight, dreamType, velocities[veloctiyIndex]);
+    var newDream = new Dream(houseIndex, dreamType, velocities[veloctiyIndex]);
     dreams.push(newDream);
 
   }
@@ -432,7 +512,6 @@ function sendDream() {
 // Function to randomly generate a dream type but constrained
 function chooseDreamType() {
   var random = Math.random();
-  var goodDreamsPercentage = 0.7;
   if (random < goodDreamsPercentage) {
     return 1;
   } else {
@@ -447,26 +526,17 @@ function updateClock() {
   var sendDreamTimerTength = sendDreamTimer * 10;
   var sendDreamTimerMilli = sendDreamTimer * 1000;
 
-  var timeBetweenFrames = Math.ceil(currentTime - lastCurrentTime ) || 16;
+  var timeBetweenFrames = Math.ceil(currentTime - lastCurrentTime) || 16;
 
 
-  console.log("currentTime % sendDreamTimerMilli: ", currentTime % sendDreamTimerMilli, " timeBetweenFrames: ", timeBetweenFrames);
 
 
-// Sending dreams using current time % dream interval == 0 doesn't work as currentTime doesn't increase every constant frame
-// Get the time difference between the last two frames and assume it's the same for this one to give you the tolerance
+  // Sending dreams using current time % dream interval == 0 doesn't work as currentTime doesn't increase every constant frame
+  // Get the time difference between the last two frames and assume it's the same for this one to give you the tolerance
   if (currentTime % sendDreamTimerMilli >= 0 && currentTime % sendDreamTimerMilli <= timeBetweenFrames) {
     sendDream();
     sendDreamFlag = true;
   }
-
-  // if (currentTimeTengthSeconds % sendDreamTimerTength - randomTolerance == 0 && !sendDreamFlag) {
-  //   sendDream();
-  //   sendDreamFlag = true;
-  // }
-  // if (currentTimeTengthSeconds % sendDreamTimerTength == sendDreamTimerTength - (sendDreamTimerTength - 1)) {
-  //   sendDreamFlag = false;
-  // }
 
 
   if (dreamsProduced % 6 == 0 && !dreamsCaughtFlag) {
@@ -480,19 +550,21 @@ function updateClock() {
 
 function nextLevel() {
 
-  var velocityStep = calculateLevelStep(1,7,maxLevels);
-  var timerStep = calculateLevelStep(1,0.3,maxLevels);
+  var velocityStep = calculateLevelStep(1, 7, maxLevels);
+  var timerStep = calculateLevelStep(1, 0.3, maxLevels);
+  var goodDreamsPercentageStep = calculateLevelStep(0.7, 0.6, maxLevels);
 
   if (currentLevel <= maxLevels) {
     dreamVelocity += velocityStep;
     sendDreamTimer += timerStep;
     dreamsAllowedOnScreen += 1;
+    goodDreamsPercentage += goodDreamsPercentageStep;
     currentLevel++;
   }
 }
 
 function calculateLevelStep(min, max, levels) {
-  return ((max - min)/levels);
+  return ((max - min) / levels);
 }
 
 function reachedSky(dream) {
@@ -503,28 +575,40 @@ function reachedSky(dream) {
   if (dream.type == 2) {
     livesLeft--;
     if (livesLeft == 0) {
-      _triggerGameEvent('gameEnd', {"score": score});
+      _triggerGameEvent('gameEnd', {
+        "score": score
+      });
     }
   }
 }
 
 function getMousePosition(event) {
-  var nx  =   ny  =   0;
+  var nx = ny = 0;
 
-    if(event.pageX) {
-        nx  =   event.pageX;
-        ny  =   event.pageY;
-    } else {
-        nx  =   event.clientX;
-        ny  =   event.clientY;
-    }
+  if (event.pageX) {
+    nx = event.pageX;
+    ny = event.pageY;
+  } else {
+    nx = event.clientX;
+    ny = event.clientY;
+  }
 
 
-    nx  -=  canvas.offset().left;
-    ny  -=  canvas.offset().top;
+  nx -= canvas.offset().left;
+  ny -= canvas.offset().top;
 
-    dreamCatcher.x = nx - (dreamCatcher.width /2);
-    dreamCatcher.y = ny - (3 * dreamCatcher.height / 4);
+  var newDreamCatcherX = nx - (dreamCatcher.width / 2);
+  console.log("dreamCatcher.x - nx: ", dreamCatcher.x - newDreamCatcherX);
+
+  if (dreamCatcher.x - newDreamCatcherX > 1) {
+    dreamCatcher.moveLeft();
+  } else if (dreamCatcher.x - newDreamCatcherX < -1) {
+    dreamCatcher.moveRight();
+  } else {
+    dreamCatcher.rest();
+  }
+  dreamCatcher.x = newDreamCatcherX;
+  dreamCatcher.y = ny - (3 * dreamCatcher.height / 4);
 
 }
 
@@ -534,10 +618,10 @@ function getTouchPosition(event) {
   nx = touch.pageX;
   ny = touch.pageY;
 
-  nx  -=  canvas.offset().left;
-  ny  -=  canvas.offset().top;
+  nx -= canvas.offset().left;
+  ny -= canvas.offset().top;
 
-  dreamCatcher.x = nx - (dreamCatcher.width /2);
+  dreamCatcher.x = nx - (dreamCatcher.width / 2);
   dreamCatcher.y = ny - dreamCatcher.height;
 }
 
@@ -546,7 +630,7 @@ function endTouchListener(event) {
 }
 
 function drawText() {
-  ctx.fillStyle = "#000";
+  ctx.fillStyle = "#FFF";
   ctx.font = "24px Hero";
   ctx.textBaseline = "top";
   var text = "Score: " + score;
@@ -557,6 +641,24 @@ function drawText() {
   ctx.fillText(text, CANVAS_WIDTH - ctx.measureText(text).width - 15, 70);
   text = "Dream Velocity: " + dreamVelocity;
   ctx.fillText(text, CANVAS_WIDTH - ctx.measureText(text).width - 15, 100);
+  text = "Good Dream Percentage: " + goodDreamsPercentage * 100;
+  ctx.fillText(text, CANVAS_WIDTH - ctx.measureText(text).width - 15, 130);
+}
+
+function drawHUD() {
+    drawText();
+
+    var livesImages = [lifeLostImage,lifeLostImage,lifeLostImage];
+
+    for (var i = 0;  i < livesLeft; i++) {
+      livesImages[i] = lifeLeftImage;
+    }
+
+    ctx.drawImage(livesImages[2], CANVAS_WIDTH - 60, 10, 35, 50);
+    ctx.drawImage(livesImages[1], CANVAS_WIDTH - 110, 10, 35, 50);
+    ctx.drawImage(livesImages[0], CANVAS_WIDTH - 160, 10, 35,50);
+
+
 }
 
 
@@ -569,30 +671,31 @@ function update() {
     moveDreams();
     draw();
   }
-    requestAnimFrame(update);
+  requestAnimFrame(update);
 }
 
 function draw() {
   ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-  var backgroundGradient = ctx.createLinearGradient(0, 0, 0, CANVAS_HEIGHT);
-  backgroundGradient.addColorStop(0, '#9FC2FF');
-  backgroundGradient.addColorStop(0.5, '#9FC2FF');
-  backgroundGradient.addColorStop(1, '#FFFFFF');
-  ctx.fillStyle = backgroundGradient;
-  ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
   ctx.drawImage(background, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+  ctx.drawImage(housesImage, 0, CANVAS_HEIGHT - 100, CANVAS_WIDTH, 100);
 
   drawDreamCatcher();
-  drawHouses();
+  // drawHouses();
   drawDreams();
-  drawText();
+  drawHUD();
 
 
 }
 
+//  Function to trigger custom event targeting the document
+//  type: Name of the event, data: Object to send extra details
 function _triggerGameEvent(type, data) {
   var detail = data || {};
-  var ev = new CustomEvent(type, {"detail": detail, "bubbles":true, "cancelable":false});
+  var ev = new CustomEvent(type, {
+    "detail": detail,
+    "bubbles": true,
+    "cancelable": false
+  });
   document.dispatchEvent(ev);
 }
