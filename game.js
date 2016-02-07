@@ -9,10 +9,10 @@ window.requestAnimFrame = (function() {
 })();
 
 var background = new Image();
-background.src = "images/skyline.svg";
+background.src = "images/skyline.png";
 
 var housesImage = new Image();
-housesImage.src = "images/houses.svg";
+housesImage.src = "images/houses.png";
 
 var goodDreamImage = new Image();
 var badDreamImage = new Image();
@@ -602,8 +602,8 @@ function getMousePosition(event) {
   if (dreamCatcher.x - newDreamCatcherX > 1) {
     dreamCatcher.moveLeft();
   } else if (dreamCatcher.x - newDreamCatcherX < -1) {
-  } else {
     dreamCatcher.moveRight();
+  } else {
     dreamCatcher.rest();
   }
   dreamCatcher.x = newDreamCatcherX;
