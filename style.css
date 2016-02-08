@@ -36,7 +36,7 @@
 	right: 0;
 	bottom: 0;
 	background-image: url("images/skyline-menu.svg");
-	background-size: 100%;
+	background-size: cover;
 	background-position: 0;
 	background-repeat: no-repeat;
 }
