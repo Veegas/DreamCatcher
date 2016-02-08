@@ -39,6 +39,23 @@ var lifeLostImage = new Image();
 lifeLostImage.src = "images/lifeLost.svg";
 lifeLeftImage.src = "images/lifeLeft.svg";
 
+
+var badDreamSpriteSheet = {
+  frame: {
+    width: 200,
+    height: 117,
+  },
+  src: "images/badDreamSprite10.svg"
+}
+var goodDreamSpriteSheet = {
+  frame: {
+    width: 200,
+    height: 155,
+  },
+  src: "images/goodDreamSprite10.svg"
+}
+
+
 // When window resizes change canvas size to match it's parent
 $(window).resize(function(event) {
   resizeCanvas();
@@ -225,34 +242,31 @@ function Dream(houseIndex, type, velocity) {
   var correspondingHouse = houses[houseIndex];
   this.x = Math.floor(correspondingHouse.x + correspondingHouse.width / 2);
   this.y = correspondingHouse.y;
-  // type 1 => Good Dream, type 2 => Bad Dream
-  if (type == 1) {
-    this.width = 75;
-    this.height = 75;
-  } else {
-    this.width = 75;
-    this.height = 45;
-  }
   this.velocity = velocity;
   this.active = true;
   this.type = type;
   this.ticksLived = 0;
   this.ticksPerFrame = 15;
   this.currentFrame = 0;
-  this.totalFrames = 4;
   // Width & height of each frame inside sprite
-  this.sprite = {
-    frame: {
-      width: 849,
-      height: 611,
-    },
-    src: "images/blue_bird_sprite.png"
+  // type 1 => Good Dream, type 2 => Bad Dream
+  if (type == 1) {
+    this.width = 75;
+    this.height = 60;
+    this.sprite = goodDreamSpriteSheet;
+    this.totalFrames = 10;
+  } else {
+    this.width = 75;
+    this.height = 45;
+    this.sprite = badDreamSpriteSheet;
+    this.totalFrames = 10;
   }
 
+
   // match speed of frames of sprite to match the speed of flapping of wings
-  var distanceMoved = velocity * 60;
-  var numberOfFlaps = Math.floor(distanceMoved / 25);
-  this.ticksPerFrame = Math.floor(60 / numberOfFlaps);
+  var distanceMoved = velocity * 30;
+  var numberOfFlaps = Math.floor(distanceMoved / 5);
+  this.ticksPerFrame = Math.ceil(30 / numberOfFlaps);
 
   dreamsOnScreen++;
   this.moveDream = function() {
@@ -272,18 +286,18 @@ function Dream(houseIndex, type, velocity) {
 
   this.drawDream = function drawDream() {
 
-      /*********** SPRITE IMAGE DREAMS ******************/
-    // this.handleSpriteFrames();
-    // var dreamImage = new Image();
-    //
-    // if (this.type == 2) {
-    //   ctx.fillStyle = "#000"; // Set color to black
-    // } else if (this.type == 1) {
-    //   ctx.fillStyle = "#F00"; // Set color to black
-    // }
-    // dreamImage.src = this.sprite.src;
-    // ctx.drawImage(dreamImage, this.currentFrame * this.sprite.frame.width ,0, this.sprite.frame.width, this.sprite.frame.height, this.x, this.y, this.width, this.height);
-      /***************************************************/
+    /*********** SPRITE IMAGE DREAMS ******************/
+    this.handleSpriteFrames();
+    var dreamImage = new Image();
+
+    if (this.type == 2) {
+      ctx.fillStyle = "#000"; // Set color to black
+    } else if (this.type == 1) {
+      ctx.fillStyle = "#F00"; // Set color to black
+    }
+    dreamImage.src = this.sprite.src;
+    ctx.drawImage(dreamImage, this.currentFrame * this.sprite.frame.width, 0, this.sprite.frame.width, this.sprite.frame.height, this.x, this.y, this.width, this.height);
+    /***************************************************/
 
 
     /*********** Gradient DREAMS ******************/
@@ -304,12 +318,12 @@ function Dream(houseIndex, type, velocity) {
 
     /*********** SIMPLE IMAGE DREAMS ******************/
 
-    console.log("DREAM X: ", this.x, " Dream Y: ", this.y);
-  if (this.type == 2) {
-    ctx.drawImage(badDreamImage, this.x, this.y, this.width, this.height);
-  } else if (this.type == 1) {
-    ctx.drawImage(goodDreamImage, this.x, this.y, this.width, this.height);
-  }
+    //   console.log("DREAM X: ", this.x, " Dream Y: ", this.y);
+    // if (this.type == 2) {
+    //   ctx.drawImage(badDreamImage, this.x, this.y, this.width, this.height);
+    // } else if (this.type == 1) {
+    //   ctx.drawImage(goodDreamImage, this.x, this.y, this.width, this.height);
+    // }
 
     /***************************************************/
 
@@ -664,17 +678,17 @@ function drawText() {
 }
 
 function drawHUD() {
-    drawText();
+  drawText();
 
-    var livesImages = [lifeLostImage,lifeLostImage,lifeLostImage];
+  var livesImages = [lifeLostImage, lifeLostImage, lifeLostImage];
 
-    for (var i = 0;  i < livesLeft; i++) {
-      livesImages[i] = lifeLeftImage;
-    }
+  for (var i = 0; i < livesLeft; i++) {
+    livesImages[i] = lifeLeftImage;
+  }
 
-    ctx.drawImage(livesImages[2], CANVAS_WIDTH - 60, 10, 35, 50);
-    ctx.drawImage(livesImages[1], CANVAS_WIDTH - 110, 10, 35, 50);
-    ctx.drawImage(livesImages[0], CANVAS_WIDTH - 160, 10, 35,50);
+  ctx.drawImage(livesImages[2], CANVAS_WIDTH - 60, 10, 35, 50);
+  ctx.drawImage(livesImages[1], CANVAS_WIDTH - 110, 10, 35, 50);
+  ctx.drawImage(livesImages[0], CANVAS_WIDTH - 160, 10, 35, 50);
 
 
 }
