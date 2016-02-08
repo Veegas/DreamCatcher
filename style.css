@@ -24,7 +24,7 @@
 	bottom: 0;
 	overflow: hidden;
 	background-image: url("images/skyline.svg");
-	background-size: 100%;
+	background-size: cover;
 	background-position: 0;
 	background-repeat: no-repeat;
 }
