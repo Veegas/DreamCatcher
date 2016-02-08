@@ -146,6 +146,7 @@ var dreamsProducedToNextLevel;
 var currentLevel;
 var maxLevels;
 var goodDreamsPercentage;
+var frameCount;
 
 
 
@@ -178,6 +179,7 @@ function setVariables() {
   currentLevel = 1;
   maxLevels = 7;
   goodDreamsPercentage = 0.7;
+  frameCount = 0;
 
 }
 
@@ -542,6 +544,7 @@ function chooseDreamType() {
 }
 
 function updateClock() {
+  frameCount++;
   var lastCurrentTime = currentTime || 0;
   currentTime = window.performance.now() - startTime;
   var currentTimeTengthSeconds = Math.floor(currentTime / 100);
@@ -556,7 +559,7 @@ function updateClock() {
 
   // Sending dreams using current time % dream interval == 0 doesn't work as currentTime doesn't increase every constant frame
   // Get the time difference between the last two frames and assume it's the same for this one to give you the tolerance
-  if (currentTime % sendDreamTimerMilli >= 0 && currentTime % sendDreamTimerMilli <= timeBetweenFrames) {
+  if (frameCount % 30 == 0) {
     sendDream();
     sendDreamFlag = true;
   }
