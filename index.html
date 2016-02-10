@@ -18,11 +18,13 @@
 			</a>
 		</div>
 		<canvas id="game-canvas" width="100px" height="100px" tab-index="1"></canvas>
-		<div id="end-game">
-			<div class="center-block">
-				<h3 class="center-text"> GAME OVER </h3>
+		<div id="end-game" class="end-game hidden">
+			<div class="center-block end-game-container">
+				<object id="end-game-svg"  width="100%" height="100%" type="image/svg+xml" data="images/endGame.svg"></object>
+
+				<!-- <h3 class="center-text"> GAME OVER </h3>
 				<h4 class="center-text"> You scored <strong id="score">  </strong></h4>
-				<a id="restart-btn" class="btn" href="javascript:void(0);">  Play again </a>
+				<a id="restart-btn" class="btn" href="javascript:void(0);">  Play again </a> -->
 			</div>
 		</div>
 	</div>

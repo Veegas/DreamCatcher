@@ -1,131 +1,139 @@
 @font-face {
-	font-family: Hero;
-	src: url("font/Hero.otf") format("opentype");
+  font-family: Hero;
+  src: url("font/Hero.otf") format("opentype");
 }
-
 @font-face {
-	font-family: Hero;
-	font-weight: 100;
-	src: url("font/Hero Light.otf") format("opentype");
+  font-family: Hero;
+  font-weight: 100;
+  src: url("font/Hero Light.otf") format("opentype");
 }
-
-
-
 #game-assets {
-	display: none;
+  display: none;
 }
-
 #game-canvas {
-	display: none;
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	overflow: hidden;
-	background-image: url("images/skyline.svg");
-	background-size: cover;
-	background-position: 0;
-	background-repeat: no-repeat;
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  background-image: url("images/skyline.svg");
+  background-size: cover;
+  background-position: 0;
+  background-repeat: no-repeat;
 }
 #menu {
-	display: block;
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background-image: url("images/skyline-menu.svg");
-	background-size: cover;
-	background-position: 0;
-	background-repeat: no-repeat;
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("images/skyline-menu.svg");
+  background-size: cover;
+  background-position: 0;
+  background-repeat: no-repeat;
 }
-
 #end-game {
-	display: none;
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background-color: transparent;
+  position: absolute;
+  background-color: transparent;
+}
+.end-game.hidden {
+  left: 100vw;
+}
+.end-game.show {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 #loading {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	text-align: center;
-	transform: translate(-50%, -50%);
-	font-size: 36pt;
-	font-family: Hero;
-	color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  text-align: center;
+  transform: translate(-50%, -50%);
+  font-size: 36pt;
+  font-family: Hero;
+  color: white;
 }
-
 #start-btn {
-	width: 100%;
-	height: 100%;
-	display: none;
+  width: 100%;
+  height: 100%;
+  display: none;
 }
 #start-btn-img {
-	width: 70%;
-	height: 100%;
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	color: #FFF;
-	text-decoration: none;
-	text-align: center;
-	font-size: 36pt;
-	font-family: Hero;
-	transform: translate(-50%, -50%);
+  width: 70%;
+  height: 100%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  color: #FFF;
+  text-decoration: none;
+  text-align: center;
+  font-size: 36pt;
+  font-family: Hero;
+  transform: translate(-50%, -50%);
 }
-
 .center-block {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  /*display: none;*/
 }
-
+.end-game-container {
+  width: 70%;
+  height: 100%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  color: #FFF;
+  text-decoration: none;
+  text-align: center;
+  font-size: 36pt;
+  font-family: Hero;
+  transform: translate(-50%, -50%);
+}
 .center-text {
-	position: relative;
-	left: 50%;
-	text-align: center;
-	transform: translate(-50%, -50%);
-	font-size: 36pt;
-	font-family: Hero;
-	color: white;
+  position: relative;
+  left: 50%;
+  text-align: center;
+  transform: translate(-50%, -50%);
+  font-size: 36pt;
+  font-family: Hero;
+  color: white;
 }
 .btn {
-	position: relative;
-	color: #FFF;
-	text-decoration: none;
-	text-align: center;
-	font-size: 36pt;
-	font-family: Hero;
-	transform: translate(-50%, -50%);
-	background-color: #D40054;
-	padding: 10px;
-	border-radius: 30px;
+  position: relative;
+  color: #FFF;
+  text-decoration: none;
+  text-align: center;
+  font-size: 36pt;
+  font-family: Hero;
+  transform: translate(-50%, -50%);
+  background-color: #D40054;
+  padding: 10px;
+  border-radius: 30px;
 }
 #wrapper {
-	position: absolute;
-	width: 60%;
-	height: 90%;
-	top: 5%;
-	left: 20%;
+  position: absolute;
+  width: 60%;
+  height: 90%;
+  top: 5%;
+  left: 20%;
 }
-
-@media only screen and  (max-device-width: 1024px) {
-	#wrapper {
-		width: 80%;
-		left: 10%;
-	}
+#restart-btn:hover, #fb-btn:hover, #leader-board:hover, #pledge-project:hover {
+  cursor: pointer;
 }
-
-@media only screen and  (max-device-width: 768px) {
-	#wrapper {
-		width: 90%;
-		left: 5%;
-	}
+@media only screen and (max-device-width: 1024px) {
+  #wrapper {
+    width: 80%;
+    left: 10%;
+  }
+}
+@media only screen and (max-device-width: 768px) {
+  #wrapper {
+    width: 90%;
+    left: 5%;
+  }
 }

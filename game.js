@@ -147,6 +147,7 @@ var currentLevel;
 var maxLevels;
 var goodDreamsPercentage;
 var frameCount;
+var framesLevel;
 
 
 
@@ -180,6 +181,7 @@ function setVariables() {
   maxLevels = 7;
   goodDreamsPercentage = 0.7;
   frameCount = 0;
+  framesLevel = 60;
 
 }
 
@@ -242,8 +244,6 @@ function House(x, y) {
 
 function Dream(houseIndex, type, velocity) {
   var correspondingHouse = houses[houseIndex];
-  this.x = Math.floor(correspondingHouse.x + correspondingHouse.width / 2);
-  this.y = correspondingHouse.y;
   this.velocity = velocity;
   this.active = true;
   this.type = type;
@@ -263,6 +263,10 @@ function Dream(houseIndex, type, velocity) {
     this.sprite = badDreamSpriteSheet;
     this.totalFrames = 10;
   }
+  var xAtLeft = Math.floor(correspondingHouse.x + correspondingHouse.width / 2);
+
+  this.x = Math.floor(xAtLeft - (this.width / 2));
+  this.y = correspondingHouse.y;
 
 
   // match speed of frames of sprite to match the speed of flapping of wings
@@ -554,12 +558,12 @@ function updateClock() {
   var timeBetweenFrames = Math.ceil(currentTime - lastCurrentTime) || 16;
 
 
-  console.log("TIME BETWEEN FRAMES: ", timeBetweenFrames);
 
 
   // Sending dreams using current time % dream interval == 0 doesn't work as currentTime doesn't increase every constant frame
   // Get the time difference between the last two frames and assume it's the same for this one to give you the tolerance
-  if (frameCount % 30 == 0) {
+  console.log("frameCount: ", frameCount , " framesLevel: ",  framesLevel);
+  if (frameCount % framesLevel == 0) {
     sendDream();
     sendDreamFlag = true;
   }
@@ -577,12 +581,14 @@ function updateClock() {
 function nextLevel() {
 
   var velocityStep = calculateLevelStep(1, 7, maxLevels);
-  var timerStep = calculateLevelStep(1, 0.3, maxLevels);
+  // var timerStep = calculateLevelStep(1, 0.3, maxLevels);
+  var frameStep = Math.ceil(calculateLevelStep(60, 10, maxLevels));
   var goodDreamsPercentageStep = calculateLevelStep(0.7, 0.6, maxLevels);
 
   if (currentLevel <= maxLevels) {
     dreamVelocity += velocityStep;
-    sendDreamTimer += timerStep;
+    // sendDreamTimer += timerStep;
+    framesLevel += frameStep;
     dreamsAllowedOnScreen += 1;
     goodDreamsPercentage += goodDreamsPercentageStep;
     currentLevel++;
@@ -668,16 +674,8 @@ function drawText() {
   ctx.fillStyle = "#FFF";
   ctx.font = "24px Hero";
   ctx.textBaseline = "top";
-  var text = "Score: " + score;
-  ctx.fillText(text, CANVAS_WIDTH - ctx.measureText(text).width - 15, 15);
-  text = "Lives: " + livesLeft;
-  ctx.fillText(text, CANVAS_WIDTH - ctx.measureText(text).width - 15, 40);
-  text = "Between Dreams: " + sendDreamTimer;
-  ctx.fillText(text, CANVAS_WIDTH - ctx.measureText(text).width - 15, 70);
-  text = "Dream Velocity: " + dreamVelocity;
-  ctx.fillText(text, CANVAS_WIDTH - ctx.measureText(text).width - 15, 100);
-  text = "Good Dream Percentage: " + goodDreamsPercentage * 100;
-  ctx.fillText(text, CANVAS_WIDTH - ctx.measureText(text).width - 15, 130);
+  var text = score;
+  ctx.fillText(text, CANVAS_WIDTH - ctx.measureText(text).width - 25, 70);
 }
 
 function drawHUD() {
