@@ -20,11 +20,6 @@ window.requestAnimFrame = (function() {
 // var housesImage = new Image();
 // housesImage.src = "images/houses.png";
 
-var goodDreamImage = new Image();
-var badDreamImage = new Image();
-goodDreamImage.src = "images/goodDream.svg";
-badDreamImage.src = "images/badDream.svg";
-
 var dreamCatcherCenterImage = new Image();
 var dreamCatcherLeftImage = new Image();
 var dreamCatcherRightImage = new Image();
@@ -120,7 +115,7 @@ var ctx = canvas[0].getContext("2d");
 
 // Audio Variables
 
-var badDreamSound = new Audio('audio/sound2.wav');
+var badDreamSound = new Audio('audio/collect.wav');
 var goodDreamSound = new Audio('audio/sound1.wav');
 
 // Game Variables
@@ -502,7 +497,7 @@ function checkCatcherCollision(dream) {
   var dreamCatcherTop = dreamCatcher.y;
   var dreamCatcherCenter = dreamCatcher.y - (dreamCatcher.height / 2);
   var dreamBottom = dream.y - dream.width;
-  if (dream.x > dreamCatcher.x - 5 && dream.x < dreamCatcher.x + dreamCatcher.width + 5) {
+  if (dream.x > dreamCatcher.x - 5 && dream.x < dreamCatcher.x + (dreamCatcher.width/2) + 5) {
     if (dreamCatcherCenter - dreamBottom < 20 && dreamCatcherCenter - dreamBottom >= -20) {
       catchDream(dream);
       dream.resetDream();
