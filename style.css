@@ -23,6 +23,9 @@
   background-position: 0;
   background-repeat: no-repeat;
 }
+.background-blur {
+	background-image: url("images/skyline-menu.svg") !important;
+}
 #menu {
   display: block;
   position: absolute;
@@ -39,7 +42,9 @@
   position: absolute;
   background-color: transparent;
 }
-.end-game.hidden {
+.end-game {
+  position: absolute;
+  overflow: hidden;
   left: 100vw;
 }
 .end-game.show {

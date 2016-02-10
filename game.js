@@ -84,7 +84,6 @@ function gameStart(event) {
 // Called when game ends
 function gameEnd(event) {
   _triggerGameEvent("gamePause");
-  backgroundSound.pause();
   $("#score").html(event.detail.score);
 }
 
@@ -107,6 +106,22 @@ function gameResume(event) {
   ctx.restore();
 }
 
+function getHighScore(score) {
+  var localStorage = window.localStorage;
+  console.log("window.localStorage: ", window.localStorage);
+  var localStorageHighScore = localStorage.getItem("tennra-dream-high-score");
+  if (!localStorageHighScore) {
+    localStorage.setItem("tennra-dream-high-score", score);
+      return score;
+  } else {
+    if (score > localStorageHighScore) {
+      localStorage.setItem("tennra-dream-high-score", score);
+      return score;
+    } else {
+      return localStorageHighScore;
+    }
+  }
+}
 
 // Create the canvas
 var canvas = $("#game-canvas");
@@ -143,6 +158,10 @@ var maxLevels;
 var goodDreamsPercentage;
 var frameCount;
 var framesLevel;
+var velocityStep;
+var frameStep;
+var goodDreamsPercentageStep;
+
 
 
 
@@ -176,7 +195,10 @@ function setVariables() {
   maxLevels = 7;
   goodDreamsPercentage = 0.7;
   frameCount = 0;
-  framesLevel = 60;
+  framesLevel = 40;
+  velocityStep = calculateLevelStep(1, 7, maxLevels);
+  frameStep = Math.ceil(calculateLevelStep(40, 10, maxLevels));
+  goodDreamsPercentageStep = calculateLevelStep(0.7, 0.6, maxLevels);
 
 }
 
@@ -575,10 +597,6 @@ function updateClock() {
 
 function nextLevel() {
 
-  var velocityStep = calculateLevelStep(1, 7, maxLevels);
-  // var timerStep = calculateLevelStep(1, 0.3, maxLevels);
-  var frameStep = Math.ceil(calculateLevelStep(60, 10, maxLevels));
-  var goodDreamsPercentageStep = calculateLevelStep(0.7, 0.6, maxLevels);
 
   if (currentLevel <= maxLevels) {
     dreamVelocity += velocityStep;
@@ -602,8 +620,17 @@ function reachedSky(dream) {
   if (dream.type == 2) {
     livesLeft--;
     if (livesLeft == 0) {
+      var highScore = getHighScore(score);
+      var newHighScore = true;
+      if (score < highScore) {
+        newHighScore = false;
+      }
       _triggerGameEvent('gameEnd', {
-        "score": score
+        "score": score,
+        "highScore": {
+          new: newHighScore,
+          score: highScore
+        }
       });
     }
   }

@@ -16,9 +16,8 @@ $(window).load(function () {
 
   endGameDoc.getElementById('restart-btn').addEventListener("click", function (event) {
     _triggerGameEvent("gameRestart");
-    $("#end-game").addClass("hidden");
-    $("#end-game").removeClass("show");
-
+    $(".end-game").removeClass("show");
+    $("#game-canvas").removeClass("background-blur");
   });
   endGameDoc.getElementById('leader-board').addEventListener("click", function (event) {
 
@@ -28,10 +27,15 @@ $(window).load(function () {
   });
 
   document.addEventListener("gameEnd", function (event) {
-    $("#end-game").removeClass("hidden");
+    $("#game-canvas").addClass("background-blur");
     $("#end-game").addClass("show");
-    console.log($("#end-game-svg"));
-    writeHighScore(200);
+
+    if (event.detail.highScore.new) {
+      $("#high-score-svg").addClass("show");
+    } else {
+      $("#end-game-svg").addClass("show");
+    }
+    writeHighScore(event.detail.highScore.score);
     writeScore(event.detail.score);
 
 
@@ -48,13 +52,18 @@ function _triggerGameEvent(type, data) {
 function writeHighScore(value) {
   var endGameDoc = $("#end-game-svg")[0].contentDocument;
 
-  var highScoreSpan = endGameDoc.getElementById("high-score-span");
   var highScore = endGameDoc.getElementById("high-score");
+  var highScoreSpan = highScore.firstElementChild;
+  console.log(highScoreSpan);
   var x = highScoreSpan.getAttributeNS(null, "x");
   var y = highScoreSpan.getAttributeNS(null, "y");
+  var fontSize = highScoreSpan.getAttributeNS(null, "font-size");
+  var style = highScoreSpan.getAttributeNS(null, "style");
   var newText = document.createElementNS("http://www.w3.org/2000/svg","tspan");
   newText.setAttributeNS(null,"x",x);
   newText.setAttributeNS(null,"y",y);
+  newText.setAttributeNS(null,"font-size",fontSize);
+  newText.setAttributeNS(null,"style",style);
   var textNode = document.createTextNode(value);
   newText.appendChild(textNode);
   highScore.appendChild(newText);
@@ -62,9 +71,8 @@ function writeHighScore(value) {
 }
 function writeScore(value) {
   var endGameDoc = $("#end-game-svg")[0].contentDocument;
-
-  var currentScoreSpan = endGameDoc.getElementById("current-score-span");
   var currentScore = endGameDoc.getElementById("current-score");
+  var currentScoreSpan = currentScore.firstElementChild;
   var x = currentScoreSpan.getAttributeNS(null, "x");
   var y = currentScoreSpan.getAttributeNS(null, "y");
   var newText = document.createElementNS("http://www.w3.org/2000/svg","tspan");
