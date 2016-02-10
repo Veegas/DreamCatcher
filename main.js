@@ -32,11 +32,12 @@ $(window).load(function () {
 
     if (event.detail.highScore.new) {
       $("#high-score-svg").addClass("show");
+      writeHighScore("#high-score-svg", event.detail.highScore.score);
     } else {
       $("#end-game-svg").addClass("show");
+      writeHighScore("#end-game-svg",event.detail.highScore.score);
+      writeScore("#end-game-svg",event.detail.score);
     }
-    writeHighScore(event.detail.highScore.score);
-    writeScore(event.detail.score);
 
 
   });
@@ -49,8 +50,8 @@ function _triggerGameEvent(type, data) {
   document.dispatchEvent(ev);
 }
 
-function writeHighScore(value) {
-  var endGameDoc = $("#end-game-svg")[0].contentDocument;
+function writeHighScore(element, value) {
+  var endGameDoc = $(element)[0].contentDocument;
 
   var highScore = endGameDoc.getElementById("high-score");
   var highScoreSpan = highScore.firstElementChild;
@@ -69,8 +70,8 @@ function writeHighScore(value) {
   highScore.appendChild(newText);
   highScore.removeChild(highScoreSpan);
 }
-function writeScore(value) {
-  var endGameDoc = $("#end-game-svg")[0].contentDocument;
+function writeScore(element, value) {
+  var endGameDoc = $(element)[0].contentDocument;
   var currentScore = endGameDoc.getElementById("current-score");
   var currentScoreSpan = currentScore.firstElementChild;
   var x = currentScoreSpan.getAttributeNS(null, "x");
