@@ -4,6 +4,7 @@ $(window).load(function () {
 
 
   var endGameDoc = $("#end-game-svg")[0].contentDocument;
+  var highScoreDoc = $("#high-score-svg")[0].contentDocument;
     $("#loading").fadeOut();
     $("#start-btn").fadeIn();
 
@@ -15,6 +16,11 @@ $(window).load(function () {
   });
 
   endGameDoc.getElementById('restart-btn').addEventListener("click", function (event) {
+    _triggerGameEvent("gameRestart");
+    $(".end-game").removeClass("show");
+    $("#game-canvas").removeClass("background-blur");
+  });
+  highScoreDoc.getElementById('restart-btn').addEventListener("click", function (event) {
     _triggerGameEvent("gameRestart");
     $(".end-game").removeClass("show");
     $("#game-canvas").removeClass("background-blur");
