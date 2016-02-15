@@ -147,6 +147,8 @@ var dreamVelocity;
 var dreamsOnScreen;
 var dreamsAllowedOnScreen;
 var dreamsProduced;
+var badDreamsProduced;
+var bonusDream;
 var lastDreamsProduced;
 var redDreamsCaught;
 var dreamsCaughtFlag;
@@ -185,6 +187,8 @@ function setVariables() {
   initialVelocity = 1;
   dreamsOnScreen = 0;
   dreamsProduced = 0;
+  badDreamsProduced = 0;
+  bonusDream = false;
   dreamsAllowedOnScreen = 5;
   lastDreamsProduced = 0;
   redDreamsCaught = 0;
@@ -283,7 +287,6 @@ function Dream(houseIndex, type, velocity) {
   } else if (type == 3) {
     this.width = 75;
     this.height = 75;
-    this.velocity = initialVelocity;
   }
   var xAtLeft = Math.floor(correspondingHouse.x + correspondingHouse.width / 2);
 
@@ -374,7 +377,7 @@ function Dream(houseIndex, type, velocity) {
 
 function initializeHouses() {
 
-  housesX = [CANVAS_WIDTH / 8, 3 * CANVAS_WIDTH / 8, 5 * CANVAS_WIDTH / 8, 7 * CANVAS_WIDTH / 8];
+  housesX = [CANVAS_WIDTH / 12, 3 * CANVAS_WIDTH / 12, 5 * CANVAS_WIDTH / 12, 7 * CANVAS_WIDTH / 12, 9 * CANVAS_WIDTH / 12, 11 * CANVAS_WIDTH / 12];
   housesX.forEach(function(houseX) {
     var house = new House(houseX);
     houses.push(house);
@@ -382,7 +385,7 @@ function initializeHouses() {
 }
 
 function repositionHouses() {
-  housesX = [CANVAS_WIDTH / 8, 3 * CANVAS_WIDTH / 8, 5 * CANVAS_WIDTH / 8, 7 * CANVAS_WIDTH / 8];
+  housesX = [CANVAS_WIDTH / 12, 3 * CANVAS_WIDTH / 12, 5 * CANVAS_WIDTH / 12, 7 * CANVAS_WIDTH / 12, 9 * CANVAS_WIDTH / 12, 11 * CANVAS_WIDTH / 12];
   houses.map(function(house, index) {
     house.x = housesX[index];
     house.y = CANVAS_HEIGHT - house.height;
@@ -565,13 +568,16 @@ function sendDream() {
 
 // Function to randomly generate a dream type but constrained
 function chooseDreamType() {
-  if (dreamsProduced % 10 == 0) {
+  if (badDreamsProduced % 15 == 0 && bonusDream) {
+    bonusDream = false;
     return 3;
   }
   var random = Math.random();
   if (random < goodDreamsPercentage) {
     return 1;
   } else {
+    badDreamsProduced++;
+    bonusDream = true;
     return 2;
   }
 }
