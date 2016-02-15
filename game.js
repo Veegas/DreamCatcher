@@ -17,8 +17,8 @@ window.requestAnimFrame = (function() {
 //   background.src = "images/skyline-s.png";
 // }
 
-// var housesImage = new Image();
-// housesImage.src = "images/houses.png";
+var bonusImage = new Image();
+bonusImage.src = "images/MBC_hope.png";
 
 var dreamCatcherCenterImage = new Image();
 var dreamCatcherLeftImage = new Image();
@@ -161,7 +161,7 @@ var framesLevel;
 var velocityStep;
 var frameStep;
 var goodDreamsPercentageStep;
-
+var initialVelocity;
 
 
 
@@ -182,6 +182,7 @@ function setVariables() {
   score = 0;
   livesLeft = 3;
   dreamVelocity = 1;
+  initialVelocity = 1;
   dreamsOnScreen = 0;
   dreamsProduced = 0;
   dreamsAllowedOnScreen = 5;
@@ -274,11 +275,15 @@ function Dream(houseIndex, type, velocity) {
     this.height = 60;
     this.sprite = goodDreamSpriteSheet;
     this.totalFrames = 10;
-  } else {
+  } else if (type == 2) {
     this.width = 75;
     this.height = 45;
     this.sprite = badDreamSpriteSheet;
     this.totalFrames = 10;
+  } else if (type == 3) {
+    this.width = 75;
+    this.height = 75;
+    this.velocity = initialVelocity;
   }
   var xAtLeft = Math.floor(correspondingHouse.x + correspondingHouse.width / 2);
 
@@ -310,16 +315,16 @@ function Dream(houseIndex, type, velocity) {
   this.drawDream = function drawDream() {
 
     /*********** SPRITE IMAGE DREAMS ******************/
-    this.handleSpriteFrames();
-    var dreamImage = new Image();
 
-    if (this.type == 2) {
-      ctx.fillStyle = "#000"; // Set color to black
-    } else if (this.type == 1) {
-      ctx.fillStyle = "#F00"; // Set color to black
+    if (this.type == 1 || this.type == 2) {
+      this.handleSpriteFrames();
+      var dreamImage = new Image();
+
+      dreamImage.src = this.sprite.src;
+      ctx.drawImage(dreamImage, this.currentFrame * this.sprite.frame.width, 0, this.sprite.frame.width, this.sprite.frame.height, this.x, this.y, this.width, this.height);
+    } else {
+      ctx.drawImage(bonusImage, this.x, this.y, this.width, this.height);
     }
-    dreamImage.src = this.sprite.src;
-    ctx.drawImage(dreamImage, this.currentFrame * this.sprite.frame.width, 0, this.sprite.frame.width, this.sprite.frame.height, this.x, this.y, this.width, this.height);
     /***************************************************/
 
 
@@ -538,6 +543,10 @@ function catchDream(dream) {
     redDreamsCaught++;
     badDreamSound.currentTime = 0;
     badDreamSound.play();
+  } else if (dream.type == 3) {
+    if (livesLeft < 3) {
+      livesLeft++;
+    }
   }
 }
 
@@ -556,6 +565,9 @@ function sendDream() {
 
 // Function to randomly generate a dream type but constrained
 function chooseDreamType() {
+  if (dreamsProduced % 10 == 0) {
+    return 3;
+  }
   var random = Math.random();
   if (random < goodDreamsPercentage) {
     return 1;
