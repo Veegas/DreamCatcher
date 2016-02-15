@@ -8,6 +8,12 @@ window.requestAnimFrame = (function() {
     };
 })();
 
+var fps = 30;
+var now;
+var then = Date.now();
+var interval = 1000/fps;
+var delta;
+
 // var background = new Image();
 // if (CANVAS_WIDTH > 750) {
 //   background.src = "images/skyline.png";
@@ -108,7 +114,6 @@ function gameResume(event) {
 
 function getHighScore(score) {
   var localStorage = window.localStorage;
-  console.log("window.localStorage: ", window.localStorage);
   var localStorageHighScore = localStorage.getItem("tennra-dream-high-score");
   if (!localStorageHighScore) {
     localStorage.setItem("tennra-dream-high-score", score);
@@ -598,7 +603,7 @@ function updateClock() {
 
   // Sending dreams using current time % dream interval == 0 doesn't work as currentTime doesn't increase every constant frame
   // Get the time difference between the last two frames and assume it's the same for this one to give you the tolerance
-  console.log("frameCount: ", frameCount , " framesLevel: ",  framesLevel);
+  // console.log("frameCount: ", frameCount , " framesLevel: ",  framesLevel);
   if (frameCount % framesLevel == 0) {
     sendDream();
     sendDreamFlag = true;
@@ -735,17 +740,62 @@ function drawHUD() {
 
 }
 
+var second_since = Date.now();
+var second = 0;
+var second_fps = 0;
 
 
 function update() {
 
-  if (gameState == 1) {
-    updateClock();
-    checkDreamsCollision();
-    moveDreams();
-    draw();
-  }
+  //  Calculating REAL FPS
+  	if (second > 1000) {
+  		second_since = Date.now();
+  		second = 0;
+
+  		console.log(second_fps);
+
+  		second_fps = 0;
+  	}
+  	else {
+  		second = Date.now() - second_since;
+  		++second_fps;
+  	}
+
   requestAnimFrame(update);
+
+  now = Date.now();
+  delta = now - then;
+
+  if (delta > interval) {
+      // update time stuffs
+
+      // Just `then = now` is not enough.
+      // Lets say we set fps at 10 which means
+      // each frame must take 100ms
+      // Now frame executes in 16ms (60fps) so
+      // the loop iterates 7 times (16*7 = 112ms) until
+      // delta > interval === true
+      // Eventually this lowers down the FPS as
+      // 112*10 = 1120ms (NOT 1000ms).
+      // So we have to get rid of that extra 12ms
+      // by subtracting delta (112) % interval (100).
+      // Hope that makes sense.
+
+      then = now - (delta % interval);
+
+      if (gameState == 1) {
+        updateClock();
+        checkDreamsCollision();
+        moveDreams();
+        draw();
+      }
+
+  }
+
+
+
+
+
 }
 
 function draw() {
