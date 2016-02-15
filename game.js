@@ -538,17 +538,18 @@ function checkCatcherCollision(dream) {
 function catchDream(dream) {
   dreamsOnScreen--;
   if (dream.type == 1) {
-    score -= 5;
+    score -= 10;
     goodDreamSound.currentTime = 0;
     goodDreamSound.play();
   } else if (dream.type == 2) {
-    score += 10;
+    score += 15;
     redDreamsCaught++;
     badDreamSound.currentTime = 0;
     badDreamSound.play();
   } else if (dream.type == 3) {
     if (livesLeft < 3) {
       livesLeft++;
+      score += 100;
     }
   }
 }
@@ -633,7 +634,7 @@ function calculateLevelStep(min, max, levels) {
 function reachedSky(dream) {
   dreamsOnScreen--;
   if (dream.type == 1) {
-    score += 10;
+    score += 20;
   }
   if (dream.type == 2) {
     livesLeft--;
