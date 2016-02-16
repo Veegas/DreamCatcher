@@ -27,7 +27,7 @@ body {
   background-repeat: no-repeat;
 }
 .background-blur {
-	background-image: url("images/skyline-menu.svg") !important;
+  background-image: url("images/skyline-menu.svg") !important;
 }
 #menu {
   display: block;
@@ -62,7 +62,7 @@ body {
   left: 50%;
   text-align: center;
   -webkit-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
   font-size: 36pt;
   font-family: Hero;
   color: white;
@@ -103,7 +103,7 @@ body {
   font-size: 36pt;
   font-family: Hero;
   -webkit-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 }
 .center-block {
   width: 100%;
@@ -122,14 +122,14 @@ body {
   font-size: 36pt;
   font-family: Hero;
   -webkit-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 }
 .center-text {
   position: relative;
   left: 50%;
   text-align: center;
   -webkit-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
   font-size: 36pt;
   font-family: Hero;
   color: white;
@@ -142,7 +142,7 @@ body {
   font-size: 36pt;
   font-family: Hero;
   -webkit-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
   background-color: #D40054;
   padding: 10px;
   border-radius: 30px;
@@ -170,4 +170,8 @@ body {
     left: 0;
     top: 0;
   }
+}
+canvas, #wrapper {
+  -webkit-transform: scale3d(2, 2, 0);
+  transform: scale3d(2, 2, 0);
 }
