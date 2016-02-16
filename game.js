@@ -189,7 +189,11 @@ function setVariables() {
     39: false,
     40: false
   };
-  startTime = window.performance.now() || Date.now();
+  if (window.performance.now()) {
+      startTime = window.performance.now()
+  } else {
+    startTime = Date.now();
+  }
   currentTime;
   sendDreamTimer = 1;
   lastDreamTime = 0;
@@ -568,7 +572,12 @@ function chooseDreamType() {
 function updateClock() {
   frameCount++;
   var lastCurrentTime = currentTime || 0;
-  var windowTime = window.performance.now() || Date.now();
+  var windowTime;
+  if (window.performance.now()) {
+    windowTime = window.performance.now();
+  } else {
+    windowTime = Date.now()
+  }
   currentTime = windowTime - startTime;
   var currentTimeTengthSeconds = Math.floor(currentTime / 100);
   var sendDreamTimerTength = sendDreamTimer * 10;
