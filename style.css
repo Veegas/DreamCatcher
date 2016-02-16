@@ -171,7 +171,3 @@ body {
     top: 0;
   }
 }
-canvas, #wrapper {
-  -webkit-transform: scale3d(2, 2, 0);
-  transform: scale3d(2, 2, 0);
-}
