@@ -722,6 +722,10 @@ function drawText() {
   ctx.textBaseline = "top";
   var text = score;
   ctx.fillText(text, CANVAS_WIDTH - ctx.measureText(text).width - 25, 70);
+  var time = (then - first)/1000;
+  var fps = parseInt(frameCount / time);
+  text = "Fps: " + fps;
+  ctx.fillText(text, CANVAS_WIDTH - ctx.measureText(text).width - 25, 100);
 }
 
 function drawHUD() {
@@ -743,6 +747,7 @@ function drawHUD() {
 var second_since = Date.now();
 var second = 0;
 var second_fps = 0;
+var first = then;
 
 
 function update() {
