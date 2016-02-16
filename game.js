@@ -30,15 +30,15 @@ var dreamCatcherCenterImage = new Image();
 var dreamCatcherLeftImage = new Image();
 var dreamCatcherRightImage = new Image();
 
-dreamCatcherLeftImage.src = "images/dreamCatcherLeft.svg";
-dreamCatcherRightImage.src = "images/dreamCatcherRight.svg";
-dreamCatcherCenterImage.src = "images/dreamCatcherCenter.svg";
+dreamCatcherLeftImage.src = "images/dreamCatcherLeft.png";
+dreamCatcherRightImage.src = "images/dreamCatcherRight.png";
+dreamCatcherCenterImage.src = "images/dreamCatcherCenter.png";
 
 var lifeLeftImage = new Image();
 var lifeLostImage = new Image();
 
-lifeLostImage.src = "images/lifeLost.svg";
-lifeLeftImage.src = "images/lifeLeft.svg";
+lifeLostImage.src = "images/lifeLost.png";
+lifeLeftImage.src = "images/lifeLeft.png";
 
 
 var badDreamSpriteSheet = {
@@ -46,14 +46,14 @@ var badDreamSpriteSheet = {
     width: 200,
     height: 117,
   },
-  src: "images/badDreamSprite10.svg"
+  src: "images/badDreamSprite10.png"
 }
 var goodDreamSpriteSheet = {
   frame: {
     width: 200,
     height: 155,
   },
-  src: "images/goodDreamSprite10.svg"
+  src: "images/goodDreamSprite10.png"
 }
 
 
@@ -724,8 +724,10 @@ function drawText() {
   ctx.fillText(text, CANVAS_WIDTH - ctx.measureText(text).width - 25, 70);
   var time = (then - first)/1000;
   var fps = parseInt(frameCount / time);
-  text = "Fps: " + fps;
+  text = "Drawing Fps: " + fps;
   ctx.fillText(text, CANVAS_WIDTH - ctx.measureText(text).width - 25, 100);
+  text = "Max FPS: " + showSecondFps;
+  ctx.fillText(text, CANVAS_WIDTH - ctx.measureText(text).width - 25, 130);
 }
 
 function drawHUD() {
@@ -748,7 +750,7 @@ var second_since = Date.now();
 var second = 0;
 var second_fps = 0;
 var first = then;
-
+var showSecondFps = 0;
 
 function update() {
 
@@ -757,7 +759,7 @@ function update() {
   		second_since = Date.now();
   		second = 0;
 
-  		console.log(second_fps);
+  		showSecondFps = second_fps;
 
   		second_fps = 0;
   	}
