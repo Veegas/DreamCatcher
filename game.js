@@ -784,7 +784,8 @@ function update() {
 
 function draw() {
 
-  ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+  canvas[0].width = canvas[0].width;
   // ctx.drawImage(background, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
   // ctx.drawImage(housesImage, 0, CANVAS_HEIGHT - 100, CANVAS_WIDTH, 100);
 
