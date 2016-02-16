@@ -77,7 +77,8 @@
 #instructions {
   position: absolute;
   top: 20%;
-  left: 20%;
+  left: 50%;
+  transform: translateX(-50%);
   color: white;
   font-size: 36pt;
   font-family: Hero;
@@ -161,6 +162,10 @@
 }
 @media only screen and (max-device-width: 768px) {
   #wrapper {
+    height: 100%;
     width: 100%;
+    left: 0;
+    top: 0;
+
   }
 }
