@@ -7,6 +7,9 @@
   font-weight: 100;
   src: url("font/Hero Light.otf") format("opentype");
 }
+body {
+  margin: 0;
+}
 #game-assets {
   display: none;
 }
