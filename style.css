@@ -63,10 +63,28 @@
   font-family: Hero;
   color: white;
 }
-#start-btn {
+#start-menu {
   width: 100%;
   height: 100%;
   display: none;
+}
+#instructions-menu {
+  width: 100%;
+  height: 100%;
+  display: none;
+}
+#instructions {
+  position: absolute;
+  top: 20%;
+  left: 20%;
+  color: white;
+  font-size: 36pt;
+  font-family: Hero;
+  text-align: center;
+}
+#start-btn {
+  width: 100%;
+  height: 100%;
 }
 #start-btn-img {
   width: 70%;

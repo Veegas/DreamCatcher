@@ -6,13 +6,18 @@ $(window).load(function () {
   var endGameDoc = $("#end-game-svg")[0].contentDocument;
   var highScoreDoc = $("#high-score-svg")[0].contentDocument;
     $("#loading").fadeOut();
-    $("#start-btn").fadeIn();
+    $("#start-menu").fadeIn();
 
 
   $("#start-btn").on("click", function (event) {
-    _triggerGameEvent("gameStart");
-    $("#menu").hide();
-    $("#game-canvas").show();
+    $("#start-menu").hide();
+    $("#instructions-menu").fadeIn();
+
+    setTimeout(function () {
+      _triggerGameEvent("gameStart");
+      $("#menu").hide();
+      $("#game-canvas").show();
+    }, 4000);
   });
 
   endGameDoc.getElementById('restart-btn').addEventListener("click", function (event) {

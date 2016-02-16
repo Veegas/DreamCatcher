@@ -55,6 +55,13 @@ var goodDreamSpriteSheet = {
   },
   src: "images/goodDreamSprite10.png"
 }
+var MBCDreamSpriteSheet = {
+  frame: {
+    width: 200,
+    height: 155,
+  },
+  src: "images/MBCDreamSprite10.png"
+}
 
 
 // When window resizes change canvas size to match it's parent
@@ -290,8 +297,10 @@ function Dream(houseIndex, type, velocity) {
     this.sprite = badDreamSpriteSheet;
     this.totalFrames = 10;
   } else if (type == 3) {
-    this.width = 75;
-    this.height = 75;
+    this.sprite = MBCDreamSpriteSheet;
+    this.totalFrames = 10;
+    this.width = 98;
+    this.height = 78;
   }
   var xAtLeft = Math.floor(correspondingHouse.x + correspondingHouse.width / 2);
 
@@ -305,6 +314,7 @@ function Dream(houseIndex, type, velocity) {
   this.ticksPerFrame = Math.ceil(30 / numberOfFlaps);
 
   dreamsOnScreen++;
+
   this.moveDream = function() {
     this.initialPosition = correspondingHouse.y
     if (this.y <= 0) {
@@ -324,45 +334,12 @@ function Dream(houseIndex, type, velocity) {
 
     /*********** SPRITE IMAGE DREAMS ******************/
 
-    if (this.type == 1 || this.type == 2) {
       this.handleSpriteFrames();
       var dreamImage = new Image();
 
       dreamImage.src = this.sprite.src;
       ctx.drawImage(dreamImage, this.currentFrame * this.sprite.frame.width, 0, this.sprite.frame.width, this.sprite.frame.height, this.x, this.y, this.width, this.height);
-    } else {
-      ctx.drawImage(bonusImage, this.x, this.y, this.width, this.height);
-    }
     /***************************************************/
-
-
-    /*********** Gradient DREAMS ******************/
-    // var gradient = ctx.createRadialGradient(this.x, this.y, this.width / 10, this.x, this.y, this.width);
-    // gradient.addColorStop(0, 'white');
-    //
-    // if (this.type == 2) {
-    //   gradient.addColorStop(1, "#B50000");
-    // } else if (this.type == 1) {
-    //   gradient.addColorStop(1, "#0000B5");
-    // }
-    // ctx.fillStyle = gradient;
-    // ctx.beginPath();
-    // ctx.arc(this.x, this.y, this.width, 0, 2 * Math.PI);
-    // ctx.fill();
-    // ctx.closePath();
-    /***************************************************/
-
-    /*********** SIMPLE IMAGE DREAMS ******************/
-
-    //   console.log("DREAM X: ", this.x, " Dream Y: ", this.y);
-    // if (this.type == 2) {
-    //   ctx.drawImage(badDreamImage, this.x, this.y, this.width, this.height);
-    // } else if (this.type == 1) {
-    //   ctx.drawImage(goodDreamImage, this.x, this.y, this.width, this.height);
-    // }
-
-    /***************************************************/
-
 
   }
 
@@ -530,8 +507,8 @@ function checkDreamsCollision() {
 function checkCatcherCollision(dream) {
   var dreamCatcherBottom = dreamCatcher.y + dreamCatcher.height;
   var dreamCatcherTop = dreamCatcher.y;
-  var dreamCatcherCenter = dreamCatcher.y - (dreamCatcher.height / 2);
-  var dreamBottom = dream.y - dream.width;
+  var dreamCatcherCenter = dreamCatcher.y - (dreamCatcher.height / 4);
+  var dreamBottom = dream.y - (dream.height/2);
   if (dream.x > dreamCatcher.x - 5 && dream.x < dreamCatcher.x + (dreamCatcher.width/2) + 5) {
     if (dreamCatcherCenter - dreamBottom < 20 && dreamCatcherCenter - dreamBottom >= -20) {
       catchDream(dream);
@@ -574,7 +551,7 @@ function sendDream() {
 
 // Function to randomly generate a dream type but constrained
 function chooseDreamType() {
-  if (badDreamsProduced % 15 == 0 && bonusDream) {
+  if (badDreamsProduced % 5 == 0 && bonusDream) {
     bonusDream = false;
     return 3;
   }
