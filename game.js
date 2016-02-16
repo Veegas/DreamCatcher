@@ -189,7 +189,7 @@ function setVariables() {
     39: false,
     40: false
   };
-  startTime = window.performance.now();
+  startTime = window.performance.now() || Date.now();
   currentTime;
   sendDreamTimer = 1;
   lastDreamTime = 0;
@@ -231,12 +231,12 @@ function resizeCanvas() {
 
 /* Initialize game at first */
 function init() {
-  $(document).keydown(keysDown).keyup(keysUp);
-  canvas[0].addEventListener("mousemove", getMousePosition);
-  canvas[0].addEventListener("touchmove", getTouchPosition);
-  canvas[0].addEventListener("touchend", endTouchListener);
-  initializeHouses();
-  update();
+    $(document).keydown(keysDown).keyup(keysUp);
+    canvas[0].addEventListener("mousemove", getMousePosition);
+    canvas[0].addEventListener("touchmove", getTouchPosition);
+    canvas[0].addEventListener("touchend", endTouchListener);
+    initializeHouses();
+    update();
 }
 
 // Drawing and animation in Canvas
@@ -568,7 +568,8 @@ function chooseDreamType() {
 function updateClock() {
   frameCount++;
   var lastCurrentTime = currentTime || 0;
-  currentTime = window.performance.now() - startTime;
+  var windowTime = window.performance.now() || Date.now();
+  currentTime = windowTime - startTime;
   var currentTimeTengthSeconds = Math.floor(currentTime / 100);
   var sendDreamTimerTength = sendDreamTimer * 10;
   var sendDreamTimerMilli = sendDreamTimer * 1000;
@@ -766,8 +767,8 @@ function update() {
       // Hope that makes sense.
 
       then = now - (delta % interval);
-
       if (gameState == 1) {
+
         updateClock();
         checkDreamsCollision();
         moveDreams();
@@ -786,9 +787,6 @@ function draw() {
 
 
   canvas[0].width = canvas[0].width;
-  // ctx.drawImage(background, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-  // ctx.drawImage(housesImage, 0, CANVAS_HEIGHT - 100, CANVAS_WIDTH, 100);
-
   drawDreamCatcher();
   drawDreams();
   drawHUD();
