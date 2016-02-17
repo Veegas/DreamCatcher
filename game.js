@@ -1,4 +1,6 @@
 var CANVAS_WIDTH, CANVAS_HEIGHT;
+// Detect if user operating system is iOS
+var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 window.requestAnimFrame = (function() {
   return window.requestAnimationFrame ||
     window.webkitRequestAnimationFrame ||
@@ -8,11 +10,6 @@ window.requestAnimFrame = (function() {
     };
 })();
 
-var fps = 30;
-var now;
-var then = Date.now();
-var interval = 1000/fps;
-var delta;
 
 // var background = new Image();
 // if (CANVAS_WIDTH > 750) {
@@ -176,6 +173,19 @@ var velocityStep;
 var frameStep;
 var goodDreamsPercentageStep;
 var initialVelocity;
+var speedUpFactor;
+
+var fps = 30;
+var now;
+var then = Date.now();
+var interval = 1000/fps;
+var delta;
+
+var second_since = Date.now();
+var second = 0;
+var second_fps = 0;
+var first = then;
+var showSecondFps = 0;
 
 
 
@@ -189,7 +199,7 @@ function setVariables() {
     39: false,
     40: false
   };
-  startTime = Date.now();
+  acestartTime = Date.now();
   currentTime;
   sendDreamTimer = 1;
   lastDreamTime = 0;
@@ -724,11 +734,6 @@ function drawHUD() {
 
 }
 
-var second_since = Date.now();
-var second = 0;
-var second_fps = 0;
-var first = then;
-var showSecondFps = 0;
 
 function update() {
 
@@ -745,7 +750,13 @@ function update() {
   		second = Date.now() - second_since;
   		++second_fps;
   	}
-
+  if (showSecondFps <= 10) {
+    speedUpFactor = 3;
+  } else if (showSecondFps <= 20) {
+    speedUpFactor = 2;
+  } else {
+    speedUpFactor = 1;
+  }
   requestAnimFrame(update);
 
   now = Date.now();
