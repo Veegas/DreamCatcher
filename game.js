@@ -121,7 +121,7 @@ function getHighScore(score) {
   var localStorageHighScore = localStorage.getItem("tennra-dream-high-score");
   if (!localStorageHighScore) {
     localStorage.setItem("tennra-dream-high-score", score);
-      return score;
+    return score;
   } else {
     if (score > localStorageHighScore) {
       localStorage.setItem("tennra-dream-high-score", score);
@@ -178,7 +178,7 @@ var speedUpFactor;
 var fps = 30;
 var now;
 var then = Date.now();
-var interval = 1000/fps;
+var interval = 1000 / fps;
 var delta;
 
 var second_since = Date.now();
@@ -219,13 +219,13 @@ function setVariables() {
   gameState = 1;
   dreamsProducedToNextLevel = 6;
   currentLevel = 1;
-  maxLevels = 7;
+  maxLevels = 8;
   goodDreamsPercentage = 0.7;
   frameCount = 0;
   framesLevel = 40;
-  velocityStep = calculateLevelStep(1, 7, maxLevels);
+  velocityStep = calculateLevelStep(1, 10, maxLevels);
   frameStep = Math.ceil(calculateLevelStep(40, 10, maxLevels));
-  goodDreamsPercentageStep = calculateLevelStep(0.7, 0.6, maxLevels);
+  goodDreamsPercentageStep = calculateLevelStep(0.7, 0.5, maxLevels);
 
 }
 
@@ -241,12 +241,12 @@ function resizeCanvas() {
 
 /* Initialize game at first */
 function init() {
-    $(document).keydown(keysDown).keyup(keysUp);
-    canvas[0].addEventListener("mousemove", getMousePosition);
-    canvas[0].addEventListener("touchmove", getTouchPosition);
-    canvas[0].addEventListener("touchend", endTouchListener);
-    initializeHouses();
-    update();
+  $(document).keydown(keysDown).keyup(keysUp);
+  canvas[0].addEventListener("mousemove", getMousePosition);
+  canvas[0].addEventListener("touchmove", getTouchPosition);
+  canvas[0].addEventListener("touchend", endTouchListener);
+  initializeHouses();
+  update();
 }
 
 // Drawing and animation in Canvas
@@ -344,11 +344,11 @@ function Dream(houseIndex, type, velocity) {
 
     /*********** SPRITE IMAGE DREAMS ******************/
 
-      this.handleSpriteFrames();
-      var dreamImage = new Image();
+    this.handleSpriteFrames();
+    var dreamImage = new Image();
 
-      dreamImage.src = this.sprite.src;
-      ctx.drawImage(dreamImage, this.currentFrame * this.sprite.frame.width, 0, this.sprite.frame.width, this.sprite.frame.height, this.x, this.y, this.width, this.height);
+    dreamImage.src = this.sprite.src;
+    ctx.drawImage(dreamImage, this.currentFrame * this.sprite.frame.width, 0, this.sprite.frame.width, this.sprite.frame.height, this.x, this.y, this.width, this.height);
     /***************************************************/
 
   }
@@ -518,8 +518,8 @@ function checkCatcherCollision(dream) {
   var dreamCatcherBottom = dreamCatcher.y + dreamCatcher.height;
   var dreamCatcherTop = dreamCatcher.y;
   var dreamCatcherCenter = dreamCatcher.y - (dreamCatcher.height / 4);
-  var dreamBottom = dream.y - (dream.height/2);
-  if (dream.x > dreamCatcher.x - 5 && dream.x < dreamCatcher.x + (dreamCatcher.width/2) + 5) {
+  var dreamBottom = dream.y - (dream.height / 2);
+  if (dream.x > dreamCatcher.x - 5 && dream.x < dreamCatcher.x + (dreamCatcher.width / 2) + 5) {
     if (dreamCatcherCenter - dreamBottom < 20 && dreamCatcherCenter - dreamBottom >= -20) {
       catchDream(dream);
       dream.resetDream();
@@ -710,7 +710,7 @@ function drawText() {
   ctx.textBaseline = "top";
   var text = score;
   ctx.fillText(text, CANVAS_WIDTH - ctx.measureText(text).width - 25, 70);
-  var time = (then - first)/1000;
+  var time = (then - first) / 1000;
   var fps = parseInt(frameCount / time);
   text = "Drawing Fps: " + fps;
   ctx.fillText(text, CANVAS_WIDTH - ctx.measureText(text).width - 25, 100);
@@ -738,18 +738,17 @@ function drawHUD() {
 function update() {
 
   //  Calculating REAL FPS
-  	if (second > 1000) {
-  		second_since = Date.now();
-  		second = 0;
+  if (second > 1000) {
+    second_since = Date.now();
+    second = 0;
 
-  		showSecondFps = second_fps;
+    showSecondFps = second_fps;
 
-  		second_fps = 0;
-  	}
-  	else {
-  		second = Date.now() - second_since;
-  		++second_fps;
-  	}
+    second_fps = 0;
+  } else {
+    second = Date.now() - second_since;
+    ++second_fps;
+  }
   if (showSecondFps <= 10) {
     speedUpFactor = 3;
   } else if (showSecondFps <= 20) {
@@ -763,28 +762,28 @@ function update() {
   delta = now - then;
 
   if (delta > interval) {
-      // update time stuffs
+    // update time stuffs
 
-      // Just `then = now` is not enough.
-      // Lets say we set fps at 10 which means
-      // each frame must take 100ms
-      // Now frame executes in 16ms (60fps) so
-      // the loop iterates 7 times (16*7 = 112ms) until
-      // delta > interval === true
-      // Eventually this lowers down the FPS as
-      // 112*10 = 1120ms (NOT 1000ms).
-      // So we have to get rid of that extra 12ms
-      // by subtracting delta (112) % interval (100).
-      // Hope that makes sense.
+    // Just `then = now` is not enough.
+    // Lets say we set fps at 10 which means
+    // each frame must take 100ms
+    // Now frame executes in 16ms (60fps) so
+    // the loop iterates 7 times (16*7 = 112ms) until
+    // delta > interval === true
+    // Eventually this lowers down the FPS as
+    // 112*10 = 1120ms (NOT 1000ms).
+    // So we have to get rid of that extra 12ms
+    // by subtracting delta (112) % interval (100).
+    // Hope that makes sense.
 
-      then = now - (delta % interval);
-      if (gameState == 1) {
+    then = now - (delta % interval);
+    if (gameState == 1) {
 
-        updateClock();
-        checkDreamsCollision();
-        moveDreams();
-        draw();
-      }
+      updateClock();
+      checkDreamsCollision();
+      moveDreams();
+      draw();
+    }
 
   }
 
