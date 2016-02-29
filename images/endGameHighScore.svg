@@ -372,13 +372,20 @@
          d="m733.19 676.64h47.532v-39.948h-47.532v39.948z" /></clipPath></defs><style
      id="style28455">
      @font-face {
-       font-family: Hero;
-       src: url(&quot;../font/Hero.otf&quot;) format(&quot;opentype&quot;);
+        font-family: 'badaboom_regular';
+        src: url("../font/badaboom-bb.regular.otf") format("opentype");
+        font-weight: normal;
+        font-style: normal;
      }
      @font-face {
-       font-family: Hero;
-       font-weight: 100;
-       src: url(&quot;../font/Hero Light.otf&quot;) format(&quot;opentype&quot;);
+     font-family: 'badaboom_regular';
+     src: url("../font/badaboom-bb.regular.otf") format("opentype");
+     font-weight: normal;
+     font-style: normal;
+     }
+
+     svg {
+      font-family: badaboom_regular;
      }
 
     #restart-btn:hover, #fb-btn:hover, #leader-board:hover, #pledge-project:hover {
@@ -731,7 +738,7 @@
        style="font-size:20.26300049px;font-family:ObelixPro;fill:#ffffff" />
 <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:20px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;font-size:20px;line-height:125%;font-family:badaboom_regular;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="258.4296"
        y="607.63428"
        id="text39793"
@@ -739,7 +746,8 @@
          sodipodi:role="line"
          id="tspan39795"
          x="258.4296"
-         y="607.63428">pledge to </tspan><tspan
+         y="607.63428"
+         >pledge to </tspan><tspan
          sodipodi:role="line"
          x="258.4296"
          y="632.63428"
@@ -1089,7 +1097,7 @@
        d="m0 0c-3.904 0.586-8.234 4.258-6.476 7.792 2.937-2.762 7.019-4.268 11.047-4.074 2.496 0.12 4.927 0.859 7.418 1.058 6.626 0.53 13.403-3.149 16.567-8.994s2.54-13.532-1.527-18.789c-1.425-1.844-3.336-3.447-5.624-3.892-4.907-0.954-9.552 5.141-7.33 9.62 1.104 2.228 5.334 2.923 5.424 0.438-2.452 2.233-6.451 2.533-9.209 0.692s-4.014-5.649-2.893-8.769c0.576-1.603 1.697-2.98 3.059-4.001 4.331-3.248 10.791-2.602 15.134 0.631 4.342 3.233 6.757 8.547 7.589 13.896 0.647 4.164 0.31 8.791-2.399 12.019-3.444 4.102-9.554 4.673-14.863 3.962-5.309-0.71-10.62-2.384-15.917-1.589"
        fill="#fff200" /></g><text
      id="high-score"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:125%;font-family:Hero;-inkscape-font-specification:Hero;letter-spacing:0px;word-spacing:0px;fill:#40bb6a"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:125%;font-family:badaboom_regular;-inkscape-font-specification:badaboom_regular;letter-spacing:0px;word-spacing:0px;fill:#40bb6a"
      xml:space="preserve"
      font-size="40px"
      y="493.2431"
@@ -1100,5 +1108,5 @@
        font-size="70px"
        y="493.2431"
        x="279.08762"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:70px;font-family:Hero;-inkscape-font-specification:Hero;fill:#40bb6a"></tspan></text>
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:70px;font-family:badaboom_regular;-inkscape-font-specification:badaboom_regular;fill:#40bb6a"></tspan></text>
 </svg>

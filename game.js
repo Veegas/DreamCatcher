@@ -90,6 +90,7 @@ function gameStart(event) {
   setVariables();
   resizeCanvas();
   init();
+  backgroundSound.play();
 }
 // Called when game ends
 function gameEnd(event) {
@@ -107,12 +108,14 @@ function gameRestart(event) {
 // Called when game paused
 function gamePause(event) {
   gameState = 2;
+  backgroundSound.pause();
   ctx.save();
 }
 
 // Called when game Resumed
 function gameResume(event) {
   gameState = 1;
+  backgroundSound.play();
   ctx.restore();
 }
 
@@ -140,7 +143,15 @@ var ctx = canvas[0].getContext("2d");
 // Audio Variables
 
 var badDreamSound = new Audio('audio/collect.wav');
+badDreamSound.volume = 0.2;
+
 var goodDreamSound = new Audio('audio/sound1.wav');
+
+var backgroundSound = new Audio('audio/background.wav');
+backgroundSound.addEventListener('ended', function() {
+    this.currentTime = 0;
+    this.play();
+}, false);
 
 // Game Variables
 var houses;
@@ -706,7 +717,7 @@ function endTouchListener(event) {
 
 function drawText() {
   ctx.fillStyle = "#FFF";
-  ctx.font = "24px Hero";
+  ctx.font = "24px badaboom_regular";
   ctx.textBaseline = "top";
   var text = score;
   ctx.fillText(text, CANVAS_WIDTH - ctx.measureText(text).width - 25, 70);
@@ -786,11 +797,6 @@ function update() {
     }
 
   }
-
-
-
-
-
 }
 
 function draw() {

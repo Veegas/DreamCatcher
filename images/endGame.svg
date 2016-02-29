@@ -602,7 +602,7 @@
              inkscape:connector-curvature="0"
              style="fill:#808285" /></g></g></g><g
        id="g32044"
-       style="font-family:'Hero';fill:#231f20"><text
+       style="font-family:'badaboom_regular';fill:#231f20"><text
          id="current-score"
          transform="matrix(0.99895,0.045811,0.045811,-0.99895,0,0)"
          font-size="38.135px"
@@ -623,17 +623,17 @@
          id="text400"
          transform="matrix(0.99895,0.045811,0.045811,-0.99895,184.32,502.87)"
          font-size="29.43px"
-         font-family="Hero"
+         font-family="badaboom_regular"
          style="font-size:29.43000031px"><tspan
            id="tspan402"
            y="0"
-           x="0 14.508792 31.577957 51.85495 67.688072"
+           x="0 14.508792"
            style="">SCORE</tspan></text>
 <text
          id="high-score"
          transform="matrix(0.99895,0.045811,0.045811,-0.99895,0,0)"
          font-size="38.135px"
-         font-family="Hero"
+         font-family="badaboom_regular"
          y="-315.72873"
          x="215.80081"
          style="font-size:38.13499832px"><tspan
@@ -739,7 +739,7 @@
        id="text476"
        transform="matrix(0.99999,-0.0037222,-0.0037222,-0.99999,295.8,283.11)"
        font-size="18px"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18px;font-family:Hero;-inkscape-font-specification:Hero;fill:#ffffff" />
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18px;font-family:badaboom_regular;-inkscape-font-specification:badaboom_regular;fill:#ffffff" />
 <g
        id="g482"><g
          id="g484"
@@ -791,17 +791,25 @@
       cursor: pointer;
     }
     @font-face {
-      font-family: Hero;
-      src: url(&quot;../font/Hero.otf&quot;) format(&quot;opentype&quot;);
+       font-family: 'badaboom_regular';
+       src: url("../font/badaboom-bb.regular.otf") format("opentype");
+       font-weight: normal;
+       font-style: normal;
     }
     @font-face {
-      font-family: Hero;
-      font-weight: 100;
-      src: url(&quot;../font/Hero Light.otf&quot;) format(&quot;opentype&quot;);
+    font-family: 'badaboom_regular';
+    src: url("../font/badaboom-bb.regular.otf") format("opentype");
+    font-weight: normal;
+    font-style: normal;
     }
+
+    svg {
+     font-family: badaboom_regular;
+    }
+
   </style><text
      xml:space="preserve"
-     style="font-style:normal;font-weight:normal;font-size:22.5px;line-height:125%;font-family:Hero;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;-inkscape-font-specification:Hero;font-stretch:normal;font-variant:normal;"
+     style="font-style:normal;font-weight:normal;font-size:22.5px;line-height:125%;font-family:badaboom_regular;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;-inkscape-font-specification:badaboom_regular;font-stretch:normal;font-variant:normal;"
      x="428.79333"
      y="544.82227"
      id="text45980"
