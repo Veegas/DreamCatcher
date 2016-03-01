@@ -153,6 +153,7 @@ var bonusDreamSound = $("#bonus-dream-sound")[0];
 // var backgroundSound = new Audio('audio/Blue Line Loop.wav');
 var backgroundSound = new Audio('audio/Space Loop.wav');
 // var backgroundSound = new Audio('audio/background.wav');
+backgroundSound.volume = 0.3;
 backgroundSound.addEventListener('ended', function() {
     this.currentTime = 0;
     this.play();
