@@ -66,7 +66,6 @@ function writeHighScore(element, value) {
 
   var highScore = endGameDoc.getElementById("high-score");
   var highScoreSpan = highScore.firstElementChild;
-  console.log(highScoreSpan);
   var x = highScoreSpan.getAttributeNS(null, "x");
   var y = highScoreSpan.getAttributeNS(null, "y");
   var fontSize = highScoreSpan.getAttributeNS(null, "font-size");
