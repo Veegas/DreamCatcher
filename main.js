@@ -88,8 +88,6 @@ function writeScore(element, value) {
   var x = currentScoreSpan.getAttributeNS(null, "x");
   var y = currentScoreSpan.getAttributeNS(null, "y");
   var newText = document.createElementNS("http://www.w3.org/2000/svg","tspan");
-  newText.setAttributeNS(null,"x",x);
-  newText.setAttributeNS(null,"y",y);
   var textNode = document.createTextNode(value);
   newText.appendChild(textNode);
   currentScore.appendChild(newText);

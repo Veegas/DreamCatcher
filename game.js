@@ -94,12 +94,14 @@ function gameStart(event) {
 }
 // Called when game ends
 function gameEnd(event) {
-  _triggerGameEvent("gamePause");
+  gameState = 2;
+  ctx.save();
   $("#score").html(event.detail.score);
 }
 
 // called when game restarts
 function gameRestart(event) {
+  ctx.restore();
   setVariables();
   initializeHouses();
   draw();
@@ -142,12 +144,15 @@ var ctx = canvas[0].getContext("2d");
 
 // Audio Variables
 
-var badDreamSound = new Audio('audio/collect.wav');
-badDreamSound.volume = 0.2;
+var badDreamSound = new Audio('audio/a1.wav');
 
-var goodDreamSound = new Audio('audio/sound1.wav');
+var goodDreamSound = new Audio('audio/a3.wav');
 
-var backgroundSound = new Audio('audio/background.wav');
+var bonusDreamSound = new Audio('audio/bonus.wav');
+
+// var backgroundSound = new Audio('audio/Blue Line Loop.wav');
+var backgroundSound = new Audio('audio/Space Loop.wav');
+// var backgroundSound = new Audio('audio/background.wav');
 backgroundSound.addEventListener('ended', function() {
     this.currentTime = 0;
     this.play();
@@ -550,9 +555,11 @@ function catchDream(dream) {
     badDreamSound.currentTime = 0;
     badDreamSound.play();
   } else if (dream.type == 3) {
+    score += 100;
+    bonusDreamSound.currentTime = 0;
+    bonusDreamSound.play();
     if (livesLeft < 3) {
       livesLeft++;
-      score += 100;
     }
   }
 }
@@ -572,7 +579,7 @@ function sendDream() {
 
 // Function to randomly generate a dream type but constrained
 function chooseDreamType() {
-  if (badDreamsProduced % 15 == 0 && bonusDream) {
+  if (badDreamsProduced % 5 == 0 && bonusDream) {
     bonusDream = false;
     return 3;
   }
