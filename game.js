@@ -144,11 +144,11 @@ var ctx = canvas[0].getContext("2d");
 
 // Audio Variables
 
-var badDreamSound = new Audio('audio/a1.wav');
+var badDreamSound = $("#bad-dream-sound")[0];
 
-var goodDreamSound = new Audio('audio/a3.wav');
+var goodDreamSound = $("#good-dream-sound")[0];
 
-var bonusDreamSound = new Audio('audio/bonus.wav');
+var bonusDreamSound = $("#bonus-dream-sound")[0];
 
 // var backgroundSound = new Audio('audio/Blue Line Loop.wav');
 var backgroundSound = new Audio('audio/Space Loop.wav');
