@@ -579,7 +579,7 @@ function sendDream() {
 
 // Function to randomly generate a dream type but constrained
 function chooseDreamType() {
-  if (badDreamsProduced % 5 == 0 && bonusDream) {
+  if (badDreamsProduced % 15 == 0 && bonusDream) {
     bonusDream = false;
     return 3;
   }
