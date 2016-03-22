@@ -1,66 +1,46 @@
 
+var endGameDoc,highScoreDoc;
 
-$(window).load(function () {
+$(window).load(function() {
+
+  // get End Game and High score SVG as HTML Element
+  endGameDoc = $("#end-game-svg")[0].contentDocument;
+  highScoreDoc = $("#high-score-svg")[0].contentDocument;
+
+  $("#loading").fadeOut();
+  $("#start-menu").fadeIn();
 
 
-  var endGameDoc = $("#end-game-svg")[0].contentDocument;
-  var highScoreDoc = $("#high-score-svg")[0].contentDocument;
-    $("#loading").fadeOut();
-    $("#start-menu").fadeIn();
-
-
-  $("#start-btn").on("click", function (event) {
+  $("#start-btn").on("click", function(event) {
     $("#start-menu").hide();
     $("#instructions-menu").fadeIn();
 
-    setTimeout(function () {
+    setTimeout(function() {
       _triggerGameEvent("gameStart");
       $("#menu").hide();
       $("#game-canvas").show();
     }, 4000);
   });
 
-  endGameDoc.getElementById('restart-btn').addEventListener("click", function (event) {
-    _triggerGameEvent("gameRestart");
-    $(".end-game").removeClass("show");
-    $("#game-canvas").removeClass("background-blur");
-  });
-  highScoreDoc.getElementById('restart-btn').addEventListener("click", function (event) {
-    _triggerGameEvent("gameRestart");
-    $(".end-game").removeClass("show");
-    $("#game-canvas").removeClass("background-blur");
-  });
-  endGameDoc.getElementById('leader-board').addEventListener("click", function (event) {
-
-  });
-  endGameDoc.getElementById('fb-btn').addEventListener("click", function (event) {
-
-  });
-
-  document.addEventListener("gameEnd", function (event) {
-    $("#game-canvas").addClass("background-blur");
-    $("#end-game").addClass("show");
-
-    if (event.detail.highScore.new) {
-      $("#high-score-svg").addClass("show");
-      writeHighScore("#high-score-svg", event.detail.highScore.score);
-    } else {
-      $("#end-game-svg").addClass("show");
-      writeHighScore("#end-game-svg",event.detail.highScore.score);
-      writeScore("#end-game-svg",event.detail.score);
-    }
+  addEventListeners();
 
 
-  });
 
 })
 
+/*HELPER FUNCTIONS*/
+
 function _triggerGameEvent(type, data) {
   var detail = data || {};
-  var ev = new CustomEvent(type, {"detail": detail, "bubbles":true, "cancelable":false});
+  var ev = new CustomEvent(type, {
+    "detail": detail,
+    "bubbles": true,
+    "cancelable": false
+  });
   document.dispatchEvent(ev);
 }
 
+  /*Writes score on high score svg element*/
 function writeHighScore(element, value) {
   var endGameDoc = $(element)[0].contentDocument;
 
@@ -70,25 +50,65 @@ function writeHighScore(element, value) {
   var y = highScoreSpan.getAttributeNS(null, "y");
   var fontSize = highScoreSpan.getAttributeNS(null, "font-size");
   var style = highScoreSpan.getAttributeNS(null, "style");
-  var newText = document.createElementNS("http://www.w3.org/2000/svg","tspan");
-  newText.setAttributeNS(null,"x",x);
-  newText.setAttributeNS(null,"y",y);
-  newText.setAttributeNS(null,"font-size",fontSize);
-  newText.setAttributeNS(null,"style",style);
+  var newText = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+  newText.setAttributeNS(null, "x", x);
+  newText.setAttributeNS(null, "y", y);
+  newText.setAttributeNS(null, "font-size", fontSize);
+  newText.setAttributeNS(null, "style", style);
   var textNode = document.createTextNode(value);
   newText.appendChild(textNode);
   highScore.appendChild(newText);
   highScore.removeChild(highScoreSpan);
 }
+
+/*Writes score on normal score svg element*/
 function writeScore(element, value) {
   var endGameDoc = $(element)[0].contentDocument;
   var currentScore = endGameDoc.getElementById("current-score");
   var currentScoreSpan = currentScore.firstElementChild;
   var x = currentScoreSpan.getAttributeNS(null, "x");
   var y = currentScoreSpan.getAttributeNS(null, "y");
-  var newText = document.createElementNS("http://www.w3.org/2000/svg","tspan");
+  var newText = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
   var textNode = document.createTextNode(value);
   newText.appendChild(textNode);
   currentScore.appendChild(newText);
   currentScore.removeChild(currentScoreSpan);
 }
+
+
+
+/*********** EVENT LISTNERES ***********/
+
+function addEventListeners() {
+  endGameDoc.getElementById('restart-btn').addEventListener("click", function(event) {
+    _triggerGameEvent("gameRestart");
+    $(".end-game").removeClass("show");
+    $("#game-canvas").removeClass("background-blur");
+  });
+
+  highScoreDoc.getElementById('restart-btn').addEventListener("click", function(event) {
+    _triggerGameEvent("gameRestart");
+    $(".end-game").removeClass("show");
+    $("#game-canvas").removeClass("background-blur");
+  });
+
+  endGameDoc.getElementById('leader-board').addEventListener("click", function(event) {
+
+  });
+
+  endGameDoc.getElementById('fb-btn').addEventListener("click", function(event) {
+
+  });
+  document.addEventListener("gameEnd", function(event) {
+    $("#game-canvas").addClass("background-blur");
+    $("#end-game").addClass("show");
+
+    if (event.detail.highScore.new) {
+      $("#high-score-svg").addClass("show");
+      writeHighScore("#high-score-svg", event.detail.highScore.score);
+    } else {
+      $("#end-game-svg").addClass("show");
+      writeHighScore("#end-game-svg", event.detail.highScore.score);
+      writeScore("#end-game-svg", event.detail.score);
+    }
+  });}

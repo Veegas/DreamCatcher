@@ -11,32 +11,23 @@ window.requestAnimFrame = (function() {
 })();
 
 
-// var background = new Image();
-// if (CANVAS_WIDTH > 750) {
-//   background.src = "images/skyline.png";
-// } else if (CANVAS_WIDTH > 350) {
-//   background.src = "images/skyline-m.png";
-// } else {
-//   background.src = "images/skyline-s.png";
-// }
-
 var bonusImage = new Image();
 bonusImage.src = "images/MBC_hope.png";
 
 var dreamCatcherCenterImage = new Image();
 var dreamCatcherLeftImage = new Image();
 var dreamCatcherRightImage = new Image();
-
 dreamCatcherLeftImage.src = "images/dreamCatcherLeft.png";
 dreamCatcherRightImage.src = "images/dreamCatcherRight.png";
 dreamCatcherCenterImage.src = "images/dreamCatcherCenter.png";
 
+
 var lifeLeftImage = new Image();
 var lifeLostImage = new Image();
-
 lifeLostImage.src = "images/lifeLost.png";
 lifeLeftImage.src = "images/lifeLeft.png";
 
+// Sprites Settings for dreams
 
 var badDreamSpriteSheet = {
   frame: {
@@ -121,6 +112,7 @@ function gameResume(event) {
   ctx.restore();
 }
 
+// get and set the new highscore
 function getHighScore(score) {
   var localStorage = window.localStorage;
   var localStorageHighScore = localStorage.getItem("tennra-dream-high-score");
@@ -145,14 +137,9 @@ var ctx = canvas[0].getContext("2d");
 // Audio Variables
 
 var badDreamSound = $("#bad-dream-sound")[0];
-
 var goodDreamSound = $("#good-dream-sound")[0];
-
 var bonusDreamSound = $("#bonus-dream-sound")[0];
-
-// var backgroundSound = new Audio('audio/Blue Line Loop.wav');
-var backgroundSound = new Audio('audio/Space Loop.wav');
-// var backgroundSound = new Audio('audio/background.wav');
+var backgroundSound = $("#background-sound")[0];
 backgroundSound.volume = 0.3;
 backgroundSound.addEventListener('ended', function() {
     this.currentTime = 0;
@@ -206,7 +193,7 @@ var showSecondFps = 0;
 
 
 
-
+//  Initialize Game Variables
 function setVariables() {
   houses = [];
   dreams = [];
@@ -266,8 +253,9 @@ function init() {
   update();
 }
 
-// Drawing and animation in Canvas
 
+
+// DREAM CATCHER OBJECT
 var dreamCatcher = {
   y: 30,
   width: 100,
@@ -286,6 +274,9 @@ var dreamCatcher = {
   },
 }
 
+  /* Constructor for HOUSE Where the dreams are Produced.
+   NB: Not used for now except for the X position as houses are just a background image
+   */
 function House(x, y) {
   this.width = 40;
   this.height = 120;
@@ -303,6 +294,11 @@ function House(x, y) {
 
 }
 
+
+/* Constructor for Dreams
+  type: 1 => Good Dream, 2 => Bad Dream, 3=> Bonus Dream
+  ticksPerFrame, ticksLive: Used in handling the sprite sheets animation
+*/
 function Dream(houseIndex, type, velocity) {
   var correspondingHouse = houses[houseIndex];
   this.velocity = velocity;
@@ -312,7 +308,6 @@ function Dream(houseIndex, type, velocity) {
   this.ticksPerFrame = 15;
   this.currentFrame = 0;
   // Width & height of each frame inside sprite
-  // type 1 => Good Dream, type 2 => Bad Dream
   if (type == 1) {
     this.width = 75;
     this.height = 60;
@@ -402,26 +397,12 @@ function repositionHouses() {
   })
 }
 
+
+/* P key pauses the game */
+
 function moveDreamCatcher(event) {
 
   switch (event.which) {
-    // ArrowLeft
-    case 37:
-      dreamCatcher.moveLeft();
-      break;
-    case 38:
-      dreamCatcher.moveUp();
-      break;
-      // ArrowRight
-    case 39:
-      dreamCatcher.moveRight();
-      break;
-      // ArrowUp
-      // Arrow Down
-    case 40:
-      // alert("DOWN");
-      dreamCatcher.moveDown();
-      break;
       // P key
     case 80:
       if (gameState == 1) {
@@ -434,67 +415,6 @@ function moveDreamCatcher(event) {
 
   }
 
-  switch (event.key) {
-    case "ArrowLeft":
-      dreamCatcher.moveLeft();
-      break;
-    case "ArrowRight":
-      dreamCatcher.moveRight();
-      break;
-    case "ArrowUp":
-      dreamCatcher.moveUp();
-      break;
-    case "ArrowDown":
-      dreamCatcher.moveDown();
-      break;
-  }
-  // Left key
-  if (event.key == "ArrowLeft") {
-    // Right Key
-  } else if (event.key == "ArrowRight") {
-    dreamCatcher.moveRight();
-  }
-
-  // else if (event.)
-
-}
-
-function keysDown(event) {
-  // moveDreamCatcher(event);
-
-  if (event.which in keysPressed) {
-    keysPressed[event.which] = true;
-
-    if (keysPressed[37]) {
-      dreamCatcher.moveLeft();
-    }
-    if (keysPressed[38]) {
-      dreamCatcher.moveUp();
-    }
-    if (keysPressed[39]) {
-      dreamCatcher.moveRight();
-    }
-    if (keysPressed[40]) {
-      dreamCatcher.moveDown();
-    }
-  } else {
-    switch (event.which) {
-      case 80:
-        if (gameState == 1) {
-          _triggerGameEvent("gamePause");
-        } else {
-          _triggerGameEvent("gameResume");
-        }
-        break;
-      default:
-    }
-  }
-}
-
-function keysUp(event) {
-  if (event.which in keysPressed) {
-    keysPressed[event.which] = false;
-  }
 }
 
 
@@ -510,14 +430,11 @@ function drawHouses() {
   })
 }
 
-
 function drawDreams() {
   dreams.forEach(function(dream) {
     dream.drawDream();
   })
 }
-
-
 
 function moveDreams() {
   dreams.forEach(function(dream) {
@@ -809,12 +726,10 @@ function update() {
 
 function draw() {
 
-
   canvas[0].width = canvas[0].width;
   drawDreamCatcher();
   drawDreams();
   drawHUD();
-
 
 }
 
