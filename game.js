@@ -245,7 +245,6 @@ function resizeCanvas() {
 
 /* Initialize game at first */
 function init() {
-  $(document).keydown(keysDown).keyup(keysUp);
   canvas[0].addEventListener("mousemove", getMousePosition);
   canvas[0].addEventListener("touchmove", getTouchPosition);
   canvas[0].addEventListener("touchend", endTouchListener);
